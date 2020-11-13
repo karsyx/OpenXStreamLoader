@@ -2,7 +2,7 @@
 # OpenXStreamLoader
 Online stream downloader
 
-##Description
+## Description
 Downloads online streams with Streamlink (included).\
 Tracks online status and resumes downloading.
 Right click on both lists for menu options.
