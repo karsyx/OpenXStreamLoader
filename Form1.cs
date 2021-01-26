@@ -56,7 +56,7 @@ namespace OpenXStreamLoader
             public Image _profileImage;
         }
 
-        private readonly float _version = 0.3f;
+        private readonly float _version = 0.4f;
         private readonly int _trayBalloonTimeout = 5000; // ms
         private int _httpRequestMethod1Delay = 1000; // ms
         private readonly string _streamlinkDefaultOptions = "--hls-timeout 120 --hls-playlist-reload-attempts 20 --hls-segment-timeout 90 --hds-segment-threads 8 --hls-segment-threads 8 --hds-timeout 120 --hds-segment-timeout 90 --hds-segment-attempts 20";
