@@ -1102,7 +1102,7 @@ namespace OpenXStreamLoader
                 {
                     StreamReader streamReader = new StreamReader(response.GetResponseStream());
                     string pageText = streamReader.ReadToEnd();
-                    Regex regex = new Regex("room_status\\\\u0022: \\\\u0022(?<string>.*)\\\\u0022, \\\\u0022edge_auth");
+                    Regex regex = new Regex("room_status\\\\u0022: \\\\u0022(?<string>.*)\\\\u0022, \\\\u0022room_uid");
                     string statusString = regex.Match(pageText).Groups["string"].ToString().ToLower();
 
                     if (statusString == "public")
