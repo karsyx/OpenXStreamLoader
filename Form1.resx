@@ -134,7 +134,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAK
-        5QUAAk1TRnQBSQFMAgEBBgEAASgBAAEoAQABtAEAAYcBAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHQ
+        5QUAAk1TRnQBSQFMAgEBBgEAAVABAAFQAQABtAEAAYcBAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHQ
         AQICAAEOAQECAAEBAQABGAUAASAB5gEIEQABqQHqAfgBqQHqAfgBqQHqAfgBqQHqAfgBqQHqAfgBqQHq
         AfgBqQHqAfgBqQHqAfgBqQHqAfgBqQHqAfgBqQHqAfgBqQHqAfgBqQHqAfgBqQHqAfgBqQHqAfgBqQHq
         AfgBqQHqAfgBqQHqAfgBqQHqAfgBqQHqAfgBqQHqAfgBqQHqAfgBqQHqAfgBqQHqAfgBqQHqAfgBqQHq
@@ -6900,9 +6900,6 @@
         LHjG9X8A/mJqVKw/AJUAAAAASUVORK5CYII=
 </value>
   </data>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>145, 17</value>
-  </metadata>
   <metadata name="openStreamlinkExeDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>533, 17</value>
   </metadata>
@@ -6923,7 +6920,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABQ
-        FAAAAk1TRnQBSQFMAwEBAAEoAQABKAEAAbQBAAGHAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwAB0AEC
+        FAAAAk1TRnQBSQFMAwEBAAFQAQABUAEAAbQBAAGHAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwAB0AEC
         AgABhwMAAQEBAAEYBQABEAFzAQQRAP////8e//8A/wD/AP8A/wD/AFoA/////x7//wD/AP8A/wD/AP8A
         WgD/////Hv//AP8A/wD/AP8A/wBaAP////8e//8A/wD/AP8A/wD/AFoA/////x7//wD/AP8A/wD/AP8A
         WgD/////Hv//AP8A/wD/AP8A/wBaAP////8e//8A/wD/AP8A/wD/AFoA/////x7//wD/AP8A/wD/AP8A

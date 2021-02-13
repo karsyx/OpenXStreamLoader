@@ -33,6 +33,8 @@
             this.tabsControl = new System.Windows.Forms.TabControl();
             this.tpRecord = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btSort = new System.Windows.Forms.Button();
+            this.btSave = new System.Windows.Forms.Button();
             this.label19 = new System.Windows.Forms.Label();
             this.tbFinalFileName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -51,6 +53,7 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -58,10 +61,15 @@
             this.cmTasks = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openTaskUrlInBrowserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openTaskUrlImgInBrowserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showInFileExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addTaskToFavoritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyURLToInputFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.startAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewStreamLinkOutputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.lvFavorites = new System.Windows.Forms.ListView();
@@ -78,6 +86,7 @@
             this.ilFavImages = new System.Windows.Forms.ImageList(this.components);
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.cbRecordOnStart = new System.Windows.Forms.CheckBox();
             this.cbOnlineNotification = new System.Windows.Forms.CheckBox();
             this.cbMinimizeToTray = new System.Windows.Forms.CheckBox();
             this.lbStreamlinkOnlineHelp = new System.Windows.Forms.LinkLabel();
@@ -125,11 +134,12 @@
             this.cmTrayIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.startAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cbRecordOnStart = new System.Windows.Forms.CheckBox();
-            this.deleteAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cbSuspend = new System.Windows.Forms.CheckBox();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.nuHttpRequestDelay1 = new System.Windows.Forms.NumericUpDown();
+            this.nuHttpRequestDelay2 = new System.Windows.Forms.NumericUpDown();
+            this.label24 = new System.Windows.Forms.Label();
             this.tabsControl.SuspendLayout();
             this.tpRecord.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -144,6 +154,9 @@
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.cmTrayIcon.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nuHttpRequestDelay1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nuHttpRequestDelay2)).BeginInit();
             this.SuspendLayout();
             // 
             // tabsControl
@@ -155,6 +168,7 @@
             this.tabsControl.Controls.Add(this.tabPage2);
             this.tabsControl.Controls.Add(this.tabPage3);
             this.tabsControl.Controls.Add(this.tabPage4);
+            this.tabsControl.Controls.Add(this.tabPage1);
             this.tabsControl.Location = new System.Drawing.Point(0, 0);
             this.tabsControl.Name = "tabsControl";
             this.tabsControl.SelectedIndex = 0;
@@ -175,6 +189,9 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.cbSuspend);
+            this.panel1.Controls.Add(this.btSort);
+            this.panel1.Controls.Add(this.btSave);
             this.panel1.Controls.Add(this.label19);
             this.panel1.Controls.Add(this.tbFinalFileName);
             this.panel1.Controls.Add(this.label1);
@@ -194,6 +211,26 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(906, 102);
             this.panel1.TabIndex = 14;
+            // 
+            // btSort
+            // 
+            this.btSort.Location = new System.Drawing.Point(814, 43);
+            this.btSort.Name = "btSort";
+            this.btSort.Size = new System.Drawing.Size(75, 23);
+            this.btSort.TabIndex = 18;
+            this.btSort.Text = "Sort Tasks";
+            this.btSort.UseVisualStyleBackColor = true;
+            this.btSort.Click += new System.EventHandler(this.btSort_Click);
+            // 
+            // btSave
+            // 
+            this.btSave.Location = new System.Drawing.Point(814, 14);
+            this.btSave.Name = "btSave";
+            this.btSave.Size = new System.Drawing.Size(75, 23);
+            this.btSave.TabIndex = 17;
+            this.btSave.Text = "Save Config";
+            this.btSave.UseVisualStyleBackColor = true;
+            this.btSave.Click += new System.EventHandler(this.btSave_Click);
             // 
             // label19
             // 
@@ -264,14 +301,18 @@
             "2160p",
             "1440p",
             "1080p",
+            "1080p,720p,540p,480p",
             "720p",
+            "720p,540p,480p,360p",
+            "540p",
             "480p",
             "360p",
             "240p",
             "worst"});
             this.cbQuality.Location = new System.Drawing.Point(594, 16);
+            this.cbQuality.MaxDropDownItems = 12;
             this.cbQuality.Name = "cbQuality";
-            this.cbQuality.Size = new System.Drawing.Size(121, 21);
+            this.cbQuality.Size = new System.Drawing.Size(146, 21);
             this.cbQuality.TabIndex = 6;
             this.cbQuality.Text = "1080p";
             // 
@@ -358,6 +399,7 @@
             this.columnHeader1,
             this.columnHeader9,
             this.columnHeader2,
+            this.columnHeader10,
             this.columnHeader7,
             this.columnHeader8,
             this.columnHeader5,
@@ -373,6 +415,8 @@
             this.lvTasks.TabIndex = 10;
             this.lvTasks.UseCompatibleStateImageBehavior = false;
             this.lvTasks.View = System.Windows.Forms.View.Details;
+            this.lvTasks.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvTasks_ColumnClick);
+            this.lvTasks.SelectedIndexChanged += new System.EventHandler(this.lvTasks_SelectedIndexChanged);
             this.lvTasks.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lvTasks_MouseDoubleClick);
             // 
             // columnHeader1
@@ -389,6 +433,11 @@
             // 
             this.columnHeader2.Text = "Status";
             this.columnHeader2.Width = 93;
+            // 
+            // columnHeader10
+            // 
+            this.columnHeader10.Text = "Room Status";
+            this.columnHeader10.Width = 100;
             // 
             // columnHeader7
             // 
@@ -415,6 +464,7 @@
             this.cmTasks.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openFileToolStripMenuItem,
             this.openTaskUrlInBrowserToolStripMenuItem,
+            this.openTaskUrlImgInBrowserToolStripMenuItem,
             this.showInFileExplorerToolStripMenuItem,
             this.addTaskToFavoritesToolStripMenuItem,
             this.copyURLToInputFieldToolStripMenuItem,
@@ -425,56 +475,91 @@
             this.deleteAllToolStripMenuItem,
             this.viewStreamLinkOutputToolStripMenuItem});
             this.cmTasks.Name = "cmTasks";
-            this.cmTasks.Size = new System.Drawing.Size(202, 246);
+            this.cmTasks.Size = new System.Drawing.Size(235, 268);
             this.cmTasks.Opening += new System.ComponentModel.CancelEventHandler(this.cmTasks_Opening);
             // 
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.openFileToolStripMenuItem.Text = "Open file";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
             // openTaskUrlInBrowserToolStripMenuItem
             // 
             this.openTaskUrlInBrowserToolStripMenuItem.Name = "openTaskUrlInBrowserToolStripMenuItem";
-            this.openTaskUrlInBrowserToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.openTaskUrlInBrowserToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.openTaskUrlInBrowserToolStripMenuItem.Text = "Open URL in browser";
             this.openTaskUrlInBrowserToolStripMenuItem.Click += new System.EventHandler(this.openTaskUrlInBrowserToolStripMenuItem_Click);
+            // 
+            // openTaskUrlImgInBrowserToolStripMenuItem
+            // 
+            this.openTaskUrlImgInBrowserToolStripMenuItem.Name = "openTaskUrlImgInBrowserToolStripMenuItem";
+            this.openTaskUrlImgInBrowserToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.openTaskUrlImgInBrowserToolStripMenuItem.Text = "Open Model Image in browser";
+            this.openTaskUrlImgInBrowserToolStripMenuItem.Click += new System.EventHandler(this.openTaskUrlImgInBrowserToolStripMenuItem_Click);
             // 
             // showInFileExplorerToolStripMenuItem
             // 
             this.showInFileExplorerToolStripMenuItem.Name = "showInFileExplorerToolStripMenuItem";
-            this.showInFileExplorerToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.showInFileExplorerToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.showInFileExplorerToolStripMenuItem.Text = "Navigate to file in Explorer";
             this.showInFileExplorerToolStripMenuItem.Click += new System.EventHandler(this.showInFileExplorerToolStripMenuItem_Click);
             // 
             // addTaskToFavoritesToolStripMenuItem
             // 
             this.addTaskToFavoritesToolStripMenuItem.Name = "addTaskToFavoritesToolStripMenuItem";
-            this.addTaskToFavoritesToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.addTaskToFavoritesToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.addTaskToFavoritesToolStripMenuItem.Text = "Add to favorites";
             this.addTaskToFavoritesToolStripMenuItem.Click += new System.EventHandler(this.addTaskToFavoritesToolStripMenuItem_Click);
             // 
             // copyURLToInputFieldToolStripMenuItem
             // 
             this.copyURLToInputFieldToolStripMenuItem.Name = "copyURLToInputFieldToolStripMenuItem";
-            this.copyURLToInputFieldToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.copyURLToInputFieldToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.copyURLToInputFieldToolStripMenuItem.Text = "Copy URL to clipboard";
             this.copyURLToInputFieldToolStripMenuItem.Click += new System.EventHandler(this.copyURLToInputFieldToolStripMenuItem_Click);
+            // 
+            // startToolStripMenuItem
+            // 
+            this.startToolStripMenuItem.Name = "startToolStripMenuItem";
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.startToolStripMenuItem.Text = "Start";
+            this.startToolStripMenuItem.Click += new System.EventHandler(this.startToolStripMenuItem_Click);
+            // 
+            // startAllToolStripMenuItem
+            // 
+            this.startAllToolStripMenuItem.Name = "startAllToolStripMenuItem";
+            this.startAllToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.startAllToolStripMenuItem.Text = "Start all";
+            this.startAllToolStripMenuItem.Click += new System.EventHandler(this.startAllToolStripMenuItem_Click);
+            // 
+            // stopToolStripMenuItem
+            // 
+            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.stopToolStripMenuItem.Text = "Stop";
+            this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
+            // deleteAllToolStripMenuItem
+            // 
+            this.deleteAllToolStripMenuItem.Name = "deleteAllToolStripMenuItem";
+            this.deleteAllToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.deleteAllToolStripMenuItem.Text = "Delete all";
+            this.deleteAllToolStripMenuItem.Click += new System.EventHandler(this.deleteAllToolStripMenuItem_Click);
             // 
             // viewStreamLinkOutputToolStripMenuItem
             // 
             this.viewStreamLinkOutputToolStripMenuItem.Name = "viewStreamLinkOutputToolStripMenuItem";
-            this.viewStreamLinkOutputToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.viewStreamLinkOutputToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.viewStreamLinkOutputToolStripMenuItem.Text = "View StreamLink output";
             this.viewStreamLinkOutputToolStripMenuItem.Click += new System.EventHandler(this.viewStreamLinkOutputToolStripMenuItem_Click);
             // 
@@ -484,7 +569,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(910, 462);
+            this.tabPage2.Size = new System.Drawing.Size(912, 528);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Favorites";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -504,7 +589,7 @@
             this.lvFavorites.Location = new System.Drawing.Point(3, 3);
             this.lvFavorites.MultiSelect = false;
             this.lvFavorites.Name = "lvFavorites";
-            this.lvFavorites.Size = new System.Drawing.Size(904, 456);
+            this.lvFavorites.Size = new System.Drawing.Size(906, 522);
             this.lvFavorites.TabIndex = 11;
             this.lvFavorites.TileSize = new System.Drawing.Size(360, 270);
             this.lvFavorites.UseCompatibleStateImageBehavior = false;
@@ -533,14 +618,14 @@
             this.updateThisToolStripMenuItem,
             this.updateNowToolStripMenuItem});
             this.cmFavorites.Name = "cmFavorites";
-            this.cmFavorites.Size = new System.Drawing.Size(276, 158);
+            this.cmFavorites.Size = new System.Drawing.Size(297, 158);
             this.cmFavorites.Opening += new System.ComponentModel.CancelEventHandler(this.cmFavorites_Opening);
             // 
             // openInBrowserToolStripMenuItem
             // 
             this.openInBrowserToolStripMenuItem.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
             this.openInBrowserToolStripMenuItem.Name = "openInBrowserToolStripMenuItem";
-            this.openInBrowserToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.openInBrowserToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
             this.openInBrowserToolStripMenuItem.Text = "Open URL in browser";
             this.openInBrowserToolStripMenuItem.Click += new System.EventHandler(this.openInBrowserToolStripMenuItem_Click);
             // 
@@ -548,42 +633,42 @@
             // 
             this.startRecordToolStripMenuItem.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.startRecordToolStripMenuItem.Name = "startRecordToolStripMenuItem";
-            this.startRecordToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.startRecordToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
             this.startRecordToolStripMenuItem.Text = "Start record";
             this.startRecordToolStripMenuItem.Click += new System.EventHandler(this.startRecordToolStripMenuItem_Click);
             // 
             // copyURLToClipboardToolStripMenuItem
             // 
             this.copyURLToClipboardToolStripMenuItem.Name = "copyURLToClipboardToolStripMenuItem";
-            this.copyURLToClipboardToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.copyURLToClipboardToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
             this.copyURLToClipboardToolStripMenuItem.Text = "Copy URL to clipboard";
             this.copyURLToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyURLToClipboardToolStripMenuItem_Click);
             // 
             // showImageorHoverWithCtrlPressedToolStripMenuItem
             // 
             this.showImageorHoverWithCtrlPressedToolStripMenuItem.Name = "showImageorHoverWithCtrlPressedToolStripMenuItem";
-            this.showImageorHoverWithCtrlPressedToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.showImageorHoverWithCtrlPressedToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
             this.showImageorHoverWithCtrlPressedToolStripMenuItem.Text = "Show profile image (press Ctrl to show all)";
             this.showImageorHoverWithCtrlPressedToolStripMenuItem.Click += new System.EventHandler(this.showImageorHoverWithCtrlPressedToolStripMenuItem_Click);
             // 
             // deleteFavToolStripMenuItem
             // 
             this.deleteFavToolStripMenuItem.Name = "deleteFavToolStripMenuItem";
-            this.deleteFavToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.deleteFavToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
             this.deleteFavToolStripMenuItem.Text = "Delete";
             this.deleteFavToolStripMenuItem.Click += new System.EventHandler(this.deleteFavToolStripMenuItem_Click);
             // 
             // updateThisToolStripMenuItem
             // 
             this.updateThisToolStripMenuItem.Name = "updateThisToolStripMenuItem";
-            this.updateThisToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.updateThisToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
             this.updateThisToolStripMenuItem.Text = "Update this";
             this.updateThisToolStripMenuItem.Click += new System.EventHandler(this.updateThisToolStripMenuItem_Click);
             // 
             // updateNowToolStripMenuItem
             // 
             this.updateNowToolStripMenuItem.Name = "updateNowToolStripMenuItem";
-            this.updateNowToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.updateNowToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
             this.updateNowToolStripMenuItem.Text = "Update all";
             this.updateNowToolStripMenuItem.Click += new System.EventHandler(this.updateNowToolStripMenuItem_Click);
             // 
@@ -612,6 +697,9 @@
             // panel2
             // 
             this.panel2.AutoScroll = true;
+            this.panel2.Controls.Add(this.label24);
+            this.panel2.Controls.Add(this.nuHttpRequestDelay2);
+            this.panel2.Controls.Add(this.nuHttpRequestDelay1);
             this.panel2.Controls.Add(this.cbRecordOnStart);
             this.panel2.Controls.Add(this.cbOnlineNotification);
             this.panel2.Controls.Add(this.cbMinimizeToTray);
@@ -646,6 +734,17 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(906, 522);
             this.panel2.TabIndex = 28;
+            // 
+            // cbRecordOnStart
+            // 
+            this.cbRecordOnStart.AutoSize = true;
+            this.cbRecordOnStart.Location = new System.Drawing.Point(8, 448);
+            this.cbRecordOnStart.Name = "cbRecordOnStart";
+            this.cbRecordOnStart.Size = new System.Drawing.Size(181, 17);
+            this.cbRecordOnStart.TabIndex = 56;
+            this.cbRecordOnStart.Text = "Start all tasks on application start";
+            this.cbRecordOnStart.UseVisualStyleBackColor = true;
+            this.cbRecordOnStart.CheckedChanged += new System.EventHandler(this.cbRecordOnStart_CheckedChanged);
             // 
             // cbOnlineNotification
             // 
@@ -818,7 +917,7 @@
             this.nuHttpRequestDelay.Size = new System.Drawing.Size(120, 20);
             this.nuHttpRequestDelay.TabIndex = 42;
             this.nuHttpRequestDelay.Value = new decimal(new int[] {
-            5000,
+            100,
             0,
             0,
             0});
@@ -965,7 +1064,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(910, 462);
+            this.tabPage4.Size = new System.Drawing.Size(912, 528);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "About";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -1100,60 +1199,108 @@
             this.openToolStripMenuItem,
             this.quitToolStripMenuItem});
             this.cmTrayIcon.Name = "cmTrayIcon";
-            this.cmTrayIcon.Size = new System.Drawing.Size(101, 48);
+            this.cmTrayIcon.Size = new System.Drawing.Size(104, 48);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.quitToolStripMenuItem.Text = "Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
-            // startToolStripMenuItem
+            // cbSuspend
             // 
-            this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.startToolStripMenuItem.Text = "Start";
-            this.startToolStripMenuItem.Click += new System.EventHandler(this.startToolStripMenuItem_Click);
+            this.cbSuspend.AutoSize = true;
+            this.cbSuspend.Location = new System.Drawing.Point(646, 58);
+            this.cbSuspend.Name = "cbSuspend";
+            this.cbSuspend.Size = new System.Drawing.Size(141, 17);
+            this.cbSuspend.TabIndex = 19;
+            this.cbSuspend.Text = "Suspend Online Polling?";
+            this.cbSuspend.UseVisualStyleBackColor = true;
             // 
-            // stopToolStripMenuItem
+            // tabPage1
             // 
-            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            this.stopToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.stopToolStripMenuItem.Text = "Stop";
-            this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
+            this.tabPage1.Controls.Add(this.textBox1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(912, 528);
+            this.tabPage1.TabIndex = 4;
+            this.tabPage1.Text = "Debug";
+            this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // startAllToolStripMenuItem
+            // textBox1
             // 
-            this.startAllToolStripMenuItem.Name = "startAllToolStripMenuItem";
-            this.startAllToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.startAllToolStripMenuItem.Text = "Start all";
-            this.startAllToolStripMenuItem.Click += new System.EventHandler(this.startAllToolStripMenuItem_Click);
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.Location = new System.Drawing.Point(-4, 0);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBox1.Size = new System.Drawing.Size(920, 528);
+            this.textBox1.TabIndex = 0;
             // 
-            // cbRecordOnStart
+            // nuHttpRequestDelay1
             // 
-            this.cbRecordOnStart.AutoSize = true;
-            this.cbRecordOnStart.Location = new System.Drawing.Point(8, 448);
-            this.cbRecordOnStart.Name = "cbRecordOnStart";
-            this.cbRecordOnStart.Size = new System.Drawing.Size(181, 17);
-            this.cbRecordOnStart.TabIndex = 56;
-            this.cbRecordOnStart.Text = "Start all tasks on application start";
-            this.cbRecordOnStart.UseVisualStyleBackColor = true;
-            this.cbRecordOnStart.CheckedChanged += new System.EventHandler(this.cbRecordOnStart_CheckedChanged);
+            this.nuHttpRequestDelay1.Location = new System.Drawing.Point(216, 270);
+            this.nuHttpRequestDelay1.Maximum = new decimal(new int[] {
+            600000,
+            0,
+            0,
+            0});
+            this.nuHttpRequestDelay1.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nuHttpRequestDelay1.Name = "nuHttpRequestDelay1";
+            this.nuHttpRequestDelay1.Size = new System.Drawing.Size(120, 20);
+            this.nuHttpRequestDelay1.TabIndex = 57;
+            this.nuHttpRequestDelay1.Value = new decimal(new int[] {
+            9000,
+            0,
+            0,
+            0});
+            this.nuHttpRequestDelay1.ValueChanged += new System.EventHandler(this.nuHttpRequestDelay1_ValueChanged);
             // 
-            // deleteAllToolStripMenuItem
+            // nuHttpRequestDelay2
             // 
-            this.deleteAllToolStripMenuItem.Name = "deleteAllToolStripMenuItem";
-            this.deleteAllToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.deleteAllToolStripMenuItem.Text = "Delete all";
-            this.deleteAllToolStripMenuItem.Click += new System.EventHandler(this.deleteAllToolStripMenuItem_Click);
+            this.nuHttpRequestDelay2.Location = new System.Drawing.Point(392, 270);
+            this.nuHttpRequestDelay2.Maximum = new decimal(new int[] {
+            600000,
+            0,
+            0,
+            0});
+            this.nuHttpRequestDelay2.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nuHttpRequestDelay2.Name = "nuHttpRequestDelay2";
+            this.nuHttpRequestDelay2.Size = new System.Drawing.Size(60, 20);
+            this.nuHttpRequestDelay2.TabIndex = 58;
+            this.nuHttpRequestDelay2.Value = new decimal(new int[] {
+            150,
+            0,
+            0,
+            0});
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(458, 277);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(100, 13);
+            this.label24.TabIndex = 60;
+            this.label24.Text = "429 Delay Seconds";
             // 
             // Form1
             // 
@@ -1187,6 +1334,10 @@
             this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.cmTrayIcon.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nuHttpRequestDelay1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nuHttpRequestDelay2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1240,6 +1391,7 @@
         private System.Windows.Forms.Label lbVersion;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ToolStripMenuItem openTaskUrlInBrowserToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openTaskUrlImgInBrowserToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showInFileExplorerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updateThisToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addTaskToFavoritesToolStripMenuItem;
@@ -1294,6 +1446,15 @@
         private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem;
         private System.Windows.Forms.CheckBox cbRecordOnStart;
         private System.Windows.Forms.ToolStripMenuItem deleteAllToolStripMenuItem;
+        private System.Windows.Forms.ColumnHeader columnHeader10;
+        private System.Windows.Forms.Button btSave;
+        private System.Windows.Forms.Button btSort;
+        private System.Windows.Forms.CheckBox cbSuspend;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.NumericUpDown nuHttpRequestDelay1;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.NumericUpDown nuHttpRequestDelay2;
     }
 }
 

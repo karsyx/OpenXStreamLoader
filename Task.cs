@@ -23,6 +23,7 @@ namespace OpenXStreamLoader
             string FileName { get; }
             long FileSize { get; }
             DateTime Created { get; }
+            DateTime Ended { get; }
             string ConsoleOutput { get; }
         };
 
@@ -32,6 +33,7 @@ namespace OpenXStreamLoader
             public string FileName { get; set; }
             public long FileSize { get; set; } = 0;
             public DateTime Created { get; set; }
+            public DateTime Ended { get; set; }
             public string ConsoleOutput { get; set; }
         }
 
@@ -57,6 +59,15 @@ namespace OpenXStreamLoader
         GetFinalFileNameFromTemplate _getFinalFileNameFromTemplate;
         private Status _status;
         private bool _processExiting;
+
+        public Status TaskStatus
+        {
+            
+            get
+            {
+                return _status;
+            }
+        }
 
         public Task(string url, string quality, bool performOnlineCheck, string executablePath, string streamlinkOptions, string outputFileNameTemplate, StatusChangedCallback statusChanged, CheckOnlineCallback checkOnline, GetFinalFileNameFromTemplate getFinalFileNameFromTemplate, int waitingTaskInterval)
         {
@@ -96,9 +107,9 @@ namespace OpenXStreamLoader
             stopProcess();
         }
 
-        public void Start()
+        public void Start(Boolean asWaiting = false)
         {
-            start();
+            start(asWaiting);
         }
 
         public void Stop()
@@ -118,7 +129,7 @@ namespace OpenXStreamLoader
             }
         }
 
-        private void start()
+        private void start(Boolean asWaiting = false)
         {
             try
             {
@@ -132,10 +143,10 @@ namespace OpenXStreamLoader
 
             }
 
-            startProcess();
+            startProcess(asWaiting);
         }
 
-        private void startProcess()
+        private void startProcess(Boolean asWaiting = false)
         {
             _process = new Process();
             _process.StartInfo.UseShellExecute = false;
@@ -147,25 +158,36 @@ namespace OpenXStreamLoader
             _process.OutputDataReceived += new DataReceivedEventHandler(onOutputDataReceived);
             _process.Exited += new EventHandler(onProcessExited);
             _fileName = _getFinalFileNameFromTemplate(_outputFileNameTemplate);
+            _status.State = TaskState.InProgress;
             _status.FileName = _fileName;
             _status.Created = DateTime.Now;
+            _status.Ended = DateTime.Now;
             _status.FileSize = -1;
-            _status.ConsoleOutput = "";
+            _status.ConsoleOutput = "Started: " + DateTime.Now.ToString("dd-MM-yyyy HH꞉mm꞉ss") + "\n";
             _process.StartInfo.Arguments = " " + _streamlinkOptions + " -o \"" + _fileName + "\" -f " + _url + " " + _quality;
 
             try
             {
                 _processExiting = false;
-                _status.State = TaskState.InProgress;
-                _process.Start();
-                _process.BeginOutputReadLine();
-                _onlineCheckTimer.Enabled = false;
-                _statusCheckTimer.Enabled = true;
+                if (asWaiting)
+                {
+                    _status.State = TaskState.Waiting;
+                    _checkOnline(_url); //queue asap
+                }
+                else
+                {
+                    _process.Start();
+                    _process.BeginOutputReadLine();
+                }
+                _onlineCheckTimer.Enabled = asWaiting;
+                _statusCheckTimer.Enabled = !asWaiting;
             }
             catch (Exception exception)
             {
                 _status.State = TaskState.StartProcessError;
-                _status.ConsoleOutput += exception.Message + "\n";
+                _status.ConsoleOutput += DateTime.Now.ToString("dd-MM-yyyy HH꞉mm꞉ss") + "\n" + exception.Message + "\n";
+                _onlineCheckTimer.Enabled = false;
+                _statusCheckTimer.Enabled = false;
             }
 
             reportStatus();
@@ -173,8 +195,10 @@ namespace OpenXStreamLoader
 
         private void stopProcess()
         {
+            _status.Ended = DateTime.Now;
+            _status.ConsoleOutput += "Stopped " + DateTime.Now.ToString("dd-MM-yyyy HH꞉mm꞉ss") + "\n";
             _processExiting = true;
-
+            
             try
             {
                 if (_process == null || _process.HasExited)
@@ -229,14 +253,21 @@ namespace OpenXStreamLoader
 
         private void onProcessExited(object sender, System.EventArgs e)
         {
-            if (_processExiting)
+            if (_processExiting)  //User stopped process or app shut down
             {
                 return;
             }
 
             _statusCheckTimer.Enabled = false;
+            _status.Ended = DateTime.Now;
+            _status.ConsoleOutput += "Exited " + DateTime.Now.ToString("dd-MM-yyyy HH꞉mm꞉ss") + "\n";
 
-            if (playableStreamFound() && !streamSupportsQuality())
+            // was current recording ended by time limit?  Make sure last file had duration before repeating.
+            if (_performOnlineCheck && recordableStreamFound()  && _status.FileSize > 1000 )
+            {  
+                startProcess();  //continue recording in new file
+            }
+            else if (playableStreamFound() && !streamSupportsQuality())
             {
                 _status.State = TaskState.StartProcessError;
             }
@@ -290,6 +321,11 @@ namespace OpenXStreamLoader
             {
                 return -1;
             }
+        }
+
+        private bool recordableStreamFound()
+        {
+            return _status.ConsoleOutput.Contains("Stopping stream early after");
         }
 
         private bool playableStreamFound()
