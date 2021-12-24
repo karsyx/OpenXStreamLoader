@@ -373,7 +373,6 @@
             this.lvTasks.GridLines = true;
             this.lvTasks.HideSelection = false;
             this.lvTasks.Location = new System.Drawing.Point(3, 111);
-            this.lvTasks.MultiSelect = false;
             this.lvTasks.Name = "lvTasks";
             this.lvTasks.Size = new System.Drawing.Size(748, 414);
             this.lvTasks.TabIndex = 10;
@@ -438,84 +437,84 @@
             this.deleteAllToolStripMenuItem,
             this.viewStreamLinkOutputToolStripMenuItem});
             this.cmTasks.Name = "cmTasks";
-            this.cmTasks.Size = new System.Drawing.Size(202, 268);
+            this.cmTasks.Size = new System.Drawing.Size(202, 246);
             this.cmTasks.Opening += new System.ComponentModel.CancelEventHandler(this.cmTasks_Opening);
             // 
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.openFileToolStripMenuItem.Text = "Open file";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
             // openTaskUrlInBrowserToolStripMenuItem
             // 
             this.openTaskUrlInBrowserToolStripMenuItem.Name = "openTaskUrlInBrowserToolStripMenuItem";
-            this.openTaskUrlInBrowserToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.openTaskUrlInBrowserToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.openTaskUrlInBrowserToolStripMenuItem.Text = "Open URL in browser";
             this.openTaskUrlInBrowserToolStripMenuItem.Click += new System.EventHandler(this.openTaskUrlInBrowserToolStripMenuItem_Click);
             // 
             // showInFileExplorerToolStripMenuItem
             // 
             this.showInFileExplorerToolStripMenuItem.Name = "showInFileExplorerToolStripMenuItem";
-            this.showInFileExplorerToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.showInFileExplorerToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.showInFileExplorerToolStripMenuItem.Text = "Navigate to file in Explorer";
             this.showInFileExplorerToolStripMenuItem.Click += new System.EventHandler(this.showInFileExplorerToolStripMenuItem_Click);
             // 
             // addTaskToFavoritesToolStripMenuItem
             // 
             this.addTaskToFavoritesToolStripMenuItem.Name = "addTaskToFavoritesToolStripMenuItem";
-            this.addTaskToFavoritesToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.addTaskToFavoritesToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.addTaskToFavoritesToolStripMenuItem.Text = "Add to favorites";
             this.addTaskToFavoritesToolStripMenuItem.Click += new System.EventHandler(this.addTaskToFavoritesToolStripMenuItem_Click);
             // 
             // copyURLToInputFieldToolStripMenuItem
             // 
             this.copyURLToInputFieldToolStripMenuItem.Name = "copyURLToInputFieldToolStripMenuItem";
-            this.copyURLToInputFieldToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.copyURLToInputFieldToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.copyURLToInputFieldToolStripMenuItem.Text = "Copy URL to clipboard";
             this.copyURLToInputFieldToolStripMenuItem.Click += new System.EventHandler(this.copyURLToInputFieldToolStripMenuItem_Click);
             // 
             // startToolStripMenuItem
             // 
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.startToolStripMenuItem.Text = "Start";
             this.startToolStripMenuItem.Click += new System.EventHandler(this.startToolStripMenuItem_Click);
             // 
             // startAllToolStripMenuItem
             // 
             this.startAllToolStripMenuItem.Name = "startAllToolStripMenuItem";
-            this.startAllToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.startAllToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.startAllToolStripMenuItem.Text = "Start all";
             this.startAllToolStripMenuItem.Click += new System.EventHandler(this.startAllToolStripMenuItem_Click);
             // 
             // stopToolStripMenuItem
             // 
             this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            this.stopToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.stopToolStripMenuItem.Text = "Stop";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // deleteAllToolStripMenuItem
             // 
             this.deleteAllToolStripMenuItem.Name = "deleteAllToolStripMenuItem";
-            this.deleteAllToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.deleteAllToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.deleteAllToolStripMenuItem.Text = "Delete all";
             this.deleteAllToolStripMenuItem.Click += new System.EventHandler(this.deleteAllToolStripMenuItem_Click);
             // 
             // viewStreamLinkOutputToolStripMenuItem
             // 
             this.viewStreamLinkOutputToolStripMenuItem.Name = "viewStreamLinkOutputToolStripMenuItem";
-            this.viewStreamLinkOutputToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.viewStreamLinkOutputToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.viewStreamLinkOutputToolStripMenuItem.Text = "View StreamLink output";
             this.viewStreamLinkOutputToolStripMenuItem.Click += new System.EventHandler(this.viewStreamLinkOutputToolStripMenuItem_Click);
             // 

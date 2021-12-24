@@ -585,18 +585,19 @@ namespace OpenXStreamLoader
 
             if (_tasks.ContainsKey(url))
             {
+                var taskData = _tasks[url];
+
                 lvTasks.SelectedItems.Clear();
-                _tasks[url]._listItem.Selected = true;
-                MessageBox.Show("Task \"" + url + "\" already exists.");
-
-                return;
+                taskData._listItem.Selected = true;
+                taskData._task.Start();
             }
+            else
+            {
+                var task = addTask(url, quality, getFinalFileNameTemplate());
 
-            addLastViewed(url);
-
-            var task = addTask(url, quality, getFinalFileNameTemplate());
-
-            task.Start();
+                task.Start();
+                addLastViewed(url);
+            }
         }
 
         private Task addTask(string url, string quality, string fileNameTemplate)
@@ -1412,32 +1413,31 @@ namespace OpenXStreamLoader
 
         private void cmTasks_Opening(object sender, CancelEventArgs e)
         {
-            bool isItemClicked = lvTasks.SelectedItems.Count > 0;
+            bool isSingle = lvTasks.SelectedItems.Count == 1;
+            bool isMulti = lvTasks.SelectedItems.Count >= 1;
 
-            openFileToolStripMenuItem.Enabled = isItemClicked;
-            openTaskUrlInBrowserToolStripMenuItem.Enabled = isItemClicked;
-            showInFileExplorerToolStripMenuItem.Enabled = isItemClicked;
-            addTaskToFavoritesToolStripMenuItem.Enabled = isItemClicked;
-            copyURLToInputFieldToolStripMenuItem.Enabled = isItemClicked;
-            startToolStripMenuItem.Enabled = isItemClicked;
-            stopToolStripMenuItem.Enabled = isItemClicked;
-            deleteToolStripMenuItem.Enabled = isItemClicked;
-            viewStreamLinkOutputToolStripMenuItem.Enabled = isItemClicked;
+            openFileToolStripMenuItem.Enabled = isSingle;
+            openTaskUrlInBrowserToolStripMenuItem.Enabled = isMulti;
+            showInFileExplorerToolStripMenuItem.Enabled = isSingle;
+            addTaskToFavoritesToolStripMenuItem.Enabled = isMulti;
+            copyURLToInputFieldToolStripMenuItem.Enabled = isSingle;
+            startToolStripMenuItem.Enabled = isMulti;
+            stopToolStripMenuItem.Enabled = isMulti;
+            deleteToolStripMenuItem.Enabled = isMulti;
+            viewStreamLinkOutputToolStripMenuItem.Enabled = isSingle;
         }
 
         private void openTaskUrlInBrowserToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (lvTasks.SelectedItems.Count == 0)
+            foreach (ListViewItem item in lvTasks.SelectedItems)
             {
-                return;
+                openUrlInBrowser(item.Text);
             }
-
-            openUrlInBrowser(lvTasks.SelectedItems[0].Text);
         }
 
         private void showInFileExplorerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (lvTasks.SelectedItems.Count == 0)
+            if (lvTasks.SelectedItems.Count != 1)
             {
                 return;
             }
@@ -1461,17 +1461,15 @@ namespace OpenXStreamLoader
 
         private void addTaskToFavoritesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (lvTasks.SelectedItems.Count == 0)
+            foreach (ListViewItem item in lvTasks.SelectedItems)
             {
-                return;
+                addToFavorites(item.Text);
             }
-
-            addToFavorites(lvTasks.SelectedItems[0].Text);
         }
 
         private void copyURLToInputFieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (lvTasks.SelectedItems.Count == 0)
+            if (lvTasks.SelectedItems.Count != 1)
             {
                 return;
             }
@@ -1481,16 +1479,14 @@ namespace OpenXStreamLoader
 
         private void startToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (lvTasks.SelectedItems.Count == 0)
+            foreach (ListViewItem item in lvTasks.SelectedItems)
             {
-                return;
-            }
+                string url = item.Text;
 
-            string url = lvTasks.SelectedItems[0].Text;
-
-            if (_tasks.ContainsKey(url))
-            {
-                _tasks[url]._task.Start();
+                if (_tasks.ContainsKey(url))
+                {
+                    _tasks[url]._task.Start();
+                }
             }
         }
 
@@ -1501,38 +1497,38 @@ namespace OpenXStreamLoader
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (lvTasks.SelectedItems.Count == 0)
+            foreach (ListViewItem item in lvTasks.SelectedItems)
             {
-                return;
-            }
+                string url = item.Text;
 
-            string url = lvTasks.SelectedItems[0].Text;
-
-            if (_tasks.ContainsKey(url))
-            {
-                _tasks[url]._task.Stop();
+                if (_tasks.ContainsKey(url))
+                {
+                    _tasks[url]._task.Stop();
+                }
             }
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (lvTasks.SelectedItems.Count == 0)
+            if (MessageBox.Show("Delete selected tasks?", "OpenXStreamLoader", MessageBoxButtons.YesNo) == DialogResult.No)
             {
                 return;
             }
 
-            string url = lvTasks.SelectedItems[0].Text;
-
-            if (MessageBox.Show("Delete \"" + url + "\"?", "OpenXStreamLoader", MessageBoxButtons.YesNo) == DialogResult.No)
+            foreach (ListViewItem item in lvTasks.SelectedItems)
             {
-                return;
+                string url = item.Text;
+
+                if (_tasks.ContainsKey(url))
+                {
+                    _tasks[url]._task.Dispose();
+                    _tasks.Remove(url);
+                }
             }
 
-            if (_tasks.ContainsKey(url))
+            foreach (ListViewItem item in lvTasks.SelectedItems)
             {
-                _tasks[url]._task.Dispose();
-                _tasks.Remove(url);
-                lvTasks.Items.Remove(lvTasks.SelectedItems[0]);
+                lvTasks.Items.Remove(item);
             }
         }
 
@@ -1564,7 +1560,7 @@ namespace OpenXStreamLoader
 
         private void openTaskFile()
         {
-            if (lvTasks.SelectedItems.Count == 0)
+            if (lvTasks.SelectedItems.Count != 1)
             {
                 return;
             }
