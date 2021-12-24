@@ -276,7 +276,6 @@ namespace OpenXStreamLoader
                     _settings._recordOnStart = settingsElement.Attributes["RecordOnStart"].InnerText.ToBoolean();
                 }
 
-
                 if (recordsElement != null)
                 {
                     var recordElements = recordsElement.GetElementsByTagName("*");
@@ -407,8 +406,7 @@ namespace OpenXStreamLoader
             {
                 try
                 {
-
-                    var element = doc.CreateElement(getXmlIdFromUrl(taskP.Key)); //todo key replace with <Item Url=""> hence no need for try catch (because key could be illegal name for XML token, e.g. starts with digit)
+                    var element = doc.CreateElement("Item");
 
                     element.SetAttribute("Url", taskP.Key);
                     element.SetAttribute("WaitForOnline", taskP.Value._config._waitForOnline.ToString());
@@ -427,7 +425,7 @@ namespace OpenXStreamLoader
                 {
 
                     var url = cbId.Items[i].ToString();
-                    var element = doc.CreateElement(getXmlIdFromUrl(url));
+                    var element = doc.CreateElement("Item");
 
                     element.SetAttribute("Url", url);
                     lastViewedElement.AppendChild(element);
@@ -441,7 +439,7 @@ namespace OpenXStreamLoader
                 {
                     var url = lvFavorites.Items[i].Text;
                     var data = _favoritesMap[url];
-                    var element = doc.CreateElement(getXmlIdFromUrl(url));
+                    var element = doc.CreateElement("Item");
 
                     element.SetAttribute("Url", url);
 
@@ -652,15 +650,6 @@ namespace OpenXStreamLoader
         {
             checkIdName();
             printFinalFileName();
-        }
-
-        private string getXmlIdFromUrl(string url) //todo del
-        {
-            string temp = Utils.getIdFromUrl(url);   // .Replace("/'", "").Replace("\\", "").Replace(":", "");
-            temp = Regex.Replace(temp, @"[^a-zA-Z0-9_.-]", "");  //Remove illegal characters
-            if (!Regex.IsMatch(temp.Substring(0, 1), @"^[a-zA-Z]")) return "_" + temp;  //If first character not letter, add underscore prefix
-            return temp;
-
         }
 
         private void checkIdName()
