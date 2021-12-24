@@ -80,13 +80,13 @@ namespace OpenXStreamLoader
         private bool _showingProfilePictures = false;
         private bool _appClosing = false;
         private Bitmap _offlineImage;
-        private ListViewColumnSorter _recordsColumnSorter;
+        private RecordsColumnSorter _recordsColumnSorter;
 
         public Form1()
         {
             InitializeComponent();
 
-            _recordsColumnSorter = new ListViewColumnSorter();
+            _recordsColumnSorter = new RecordsColumnSorter();
             lvTasks.ListViewItemSorter = _recordsColumnSorter;
             lvTasks.enableDoubleBuffering();
             lvFavorites.enableDoubleBuffering(true);
@@ -585,6 +585,8 @@ namespace OpenXStreamLoader
 
             if (_tasks.ContainsKey(url))
             {
+                lvTasks.SelectedItems.Clear();
+                _tasks[url]._listItem.Selected = true;
                 MessageBox.Show("Task \"" + url + "\" already exists.");
 
                 return;
@@ -611,8 +613,10 @@ namespace OpenXStreamLoader
                 Directory.CreateDirectory(fullPath);
             }
 
+            Task task = new Task(url, quality, cbOnlineCheck.Checked, _settings._streamlinkExePath, _settings._streamlinkOptions, fileNameTemplate, onTaskStatusChangedEvent, checkTastUrlOnline, getFinalFileNameFromTemplate, _settings._waitingTaskInterval);
             ListViewItem listItem = new ListViewItem(url);
 
+            listItem.Tag = task.TaskStatus;
             listItem.SubItems.Add(cbOnlineCheck.Checked ? "✓" : "");
             listItem.SubItems.Add("Stopped");
             listItem.SubItems.Add("");
@@ -621,8 +625,6 @@ namespace OpenXStreamLoader
             listItem.SubItems.Add("");
             listItem.SubItems.Add("");
             lvTasks.Items.Add(listItem);
-
-            Task task = new Task(url, quality, cbOnlineCheck.Checked, _settings._streamlinkExePath, _settings._streamlinkOptions, fileNameTemplate, onTaskStatusChangedEvent, checkTastUrlOnline, getFinalFileNameFromTemplate, _settings._waitingTaskInterval);
 
             _tasks.Add(url, new TaskData()
             {
@@ -731,11 +733,12 @@ namespace OpenXStreamLoader
             });
         }
 
-        private void updateTaskFileInfo(ListViewItem item, Task.IStatusView status)
+        private void updateTaskFileInfo(ListViewItem item, Task.IStatusView status, bool isRecording = false)
         {
             if (status.FileSize > 0)
             {
-                item.SubItems[5].Text = getDurationString(status.Created, status.Ended);
+                item.SubItems[5].Text = isRecording? getDurationString(status.Created, DateTime.Now):
+                                                     getDurationString(status.Created, status.Ended);
                 item.SubItems[6].Text = Utils.formatBytes(status.FileSize);
                 item.SubItems[7].Text = status.FileName;
             }
@@ -768,18 +771,14 @@ namespace OpenXStreamLoader
 
             task._consoleOutput = status.ConsoleOutput;
             lvTasks.BeginUpdate();
-            item.SubItems[5].Text = "";
-            item.SubItems[6].Text = "";
-            item.SubItems[7].Text = "";
 
             switch (status.State)
             {
                 case Task.TaskState.InProgress:
                 {
                     item.SubItems[2].Text = "Recording...";
-                    item.SubItems[3].Text = "";
                     item.BackColor = Color.Lime;
-                    updateTaskFileInfo(item, status);
+                    updateTaskFileInfo(item, status, true);
 
                     break;
                 }
@@ -832,10 +831,13 @@ namespace OpenXStreamLoader
 
         private void addLastViewed(string url)
         {
-            if (!cbId.Items.Contains(url))
+            // put it on top
+            if (cbId.Items.Contains(url))
             {
-                cbId.Items.Insert(0, url);
+                cbId.Items.Remove(url);
             }
+
+            cbId.Items.Insert(0, url);
         }
 
         private void tbFileName_TextChanged(object sender, EventArgs e)
@@ -1867,7 +1869,7 @@ namespace OpenXStreamLoader
             }
 
             // Perform the sort with these new sort options.
-            this.lvTasks.Sort();
+            lvTasks.Sort();
         }
     }
 }

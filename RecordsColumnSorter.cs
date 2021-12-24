@@ -12,7 +12,7 @@ namespace OpenXStreamLoader
     /// This class is an implementation of the 'IComparer' interface.
     /// https://docs.microsoft.com/en-us/troubleshoot/dotnet/csharp/sort-listview-by-column
     /// </summary>
-    public class ListViewColumnSorter : IComparer
+    public class RecordsColumnSorter : IComparer
     {
         /// <summary>
         /// Specifies the column to be sorted
@@ -32,7 +32,7 @@ namespace OpenXStreamLoader
         /// <summary>
         /// Class constructor. Initializes various elements
         /// </summary>
-        public ListViewColumnSorter()
+        public RecordsColumnSorter()
         {
             // Initialize the column to '0'
             ColumnToSort = 0;
@@ -60,7 +60,19 @@ namespace OpenXStreamLoader
             listviewY = (ListViewItem)y;
 
             // Compare the two items
-            compareResult = ObjectCompare.Compare(listviewX.SubItems[ColumnToSort].Text, listviewY.SubItems[ColumnToSort].Text);
+
+            if (ColumnToSort == 2)
+            {
+                var status1 = (Task.IStatusView)listviewX.Tag;
+                var status2 = (Task.IStatusView)listviewY.Tag;
+
+                compareResult = (int)status1.State - (int)status2.State;
+            }
+            else
+            {
+                compareResult = ObjectCompare.Compare(listviewX.SubItems[ColumnToSort].Text, listviewY.SubItems[ColumnToSort].Text);
+            }
+
             if (ColumnToSort > 0 && compareResult == 0)
             {
                 compareResult = ObjectCompare.Compare(listviewX.SubItems[0].Text, listviewY.SubItems[0].Text);
@@ -113,6 +125,5 @@ namespace OpenXStreamLoader
                 return OrderOfSort;
             }
         }
-
     }
 }

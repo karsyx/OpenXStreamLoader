@@ -87,7 +87,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="ListViewColumnSorter.cs" />
+    <Compile Include="RecordsColumnSorter.cs" />
     <Compile Include="Preview.cs">
       <SubType>Form</SubType>
     </Compile>

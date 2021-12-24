@@ -10,10 +10,10 @@ namespace OpenXStreamLoader
     {
         public enum TaskState
         {
-            Stopped,
-            Waiting,
             InProgress,
+            Waiting,
             Finished,
+            Stopped,
             StartProcessError
         };
 
@@ -35,6 +35,14 @@ namespace OpenXStreamLoader
             public DateTime Created { get; set; }
             public DateTime Ended { get; set; }
             public string ConsoleOutput { get; set; }
+        }
+
+        public IStatusView TaskStatus
+        {
+            get
+            {
+                return _status;
+            }
         }
 
         public delegate void StatusChangedCallback(string url, IStatusView status);
