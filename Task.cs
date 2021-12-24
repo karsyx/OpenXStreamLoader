@@ -60,15 +60,6 @@ namespace OpenXStreamLoader
         private Status _status;
         private bool _processExiting;
 
-        public Status TaskStatus
-        {
-            
-            get
-            {
-                return _status;
-            }
-        }
-
         public Task(string url, string quality, bool performOnlineCheck, string executablePath, string streamlinkOptions, string outputFileNameTemplate, StatusChangedCallback statusChanged, CheckOnlineCallback checkOnline, GetFinalFileNameFromTemplate getFinalFileNameFromTemplate, int waitingTaskInterval)
         {
             _url = url;
@@ -123,7 +114,7 @@ namespace OpenXStreamLoader
 
         public void ResumeOnline()
         {
-            if (_status.State == TaskState.Waiting)
+            if (_status.State == TaskState.Waiting || _status.State == TaskState.StartProcessError && _performOnlineCheck)
             {
                 start();
             }
@@ -140,7 +131,7 @@ namespace OpenXStreamLoader
             }
             catch
             {
-
+                //todo
             }
 
             startProcess(asWaiting);
@@ -169,6 +160,7 @@ namespace OpenXStreamLoader
             try
             {
                 _processExiting = false;
+
                 if (asWaiting)
                 {
                     _status.State = TaskState.Waiting;
@@ -179,14 +171,15 @@ namespace OpenXStreamLoader
                     _process.Start();
                     _process.BeginOutputReadLine();
                 }
-                _onlineCheckTimer.Enabled = asWaiting;
+
+                _onlineCheckTimer.Enabled = asWaiting && _performOnlineCheck;
                 _statusCheckTimer.Enabled = !asWaiting;
             }
             catch (Exception exception)
             {
                 _status.State = TaskState.StartProcessError;
                 _status.ConsoleOutput += DateTime.Now.ToString("dd-MM-yyyy HH꞉mm꞉ss") + "\n" + exception.Message + "\n";
-                _onlineCheckTimer.Enabled = false;
+                _onlineCheckTimer.Enabled = _performOnlineCheck;
                 _statusCheckTimer.Enabled = false;
             }
 
@@ -198,7 +191,7 @@ namespace OpenXStreamLoader
             _status.Ended = DateTime.Now;
             _status.ConsoleOutput += "Stopped " + DateTime.Now.ToString("dd-MM-yyyy HH꞉mm꞉ss") + "\n";
             _processExiting = true;
-            
+
             try
             {
                 if (_process == null || _process.HasExited)
@@ -222,9 +215,11 @@ namespace OpenXStreamLoader
                         return;
                     }
 
-                    //Didn't work (main process shuts down itself occasionally):
+                    // Attaching to the console and sending control break event didn't work (main application process shuts down itself occasionally):
                     //https://stackoverflow.com/questions/2055753/how-to-gracefully-terminate-a-process
                     //https://github.com/gapotchenko/Gapotchenko.FX/blob/1accd5c03a310a925939ee55a9bd3055dadb4baa/Source/Gapotchenko.FX.Diagnostics.Process/ProcessExtensions.End.cs#L247-L328
+                    //
+                    // So have to do it brutally by killing the Streamlink.exe process and its Python.exe child processes
 
                     Utils.killProcessTree(id);
                 }
@@ -246,11 +241,6 @@ namespace OpenXStreamLoader
             _process = null;
         }
 
-        private void printdebug(string mes)
-        {
-            System.Diagnostics.Debug.WriteLine(mes);
-        }
-
         private void onProcessExited(object sender, System.EventArgs e)
         {
             if (_processExiting)  //User stopped process or app shut down
@@ -262,14 +252,15 @@ namespace OpenXStreamLoader
             _status.Ended = DateTime.Now;
             _status.ConsoleOutput += "Exited " + DateTime.Now.ToString("dd-MM-yyyy HH꞉mm꞉ss") + "\n";
 
-            // was current recording ended by time limit?  Make sure last file had duration before repeating.
+            // Was current recording ended by time limit?  Make sure last file had duration before repeating.
             if (_performOnlineCheck && recordableStreamFound()  && _status.FileSize > 1000 )
-            {  
+            {
                 startProcess();  //continue recording in new file
             }
             else if (playableStreamFound() && !streamSupportsQuality())
             {
                 _status.State = TaskState.StartProcessError;
+                _onlineCheckTimer.Enabled = _performOnlineCheck;
             }
             else if (_performOnlineCheck)
             {

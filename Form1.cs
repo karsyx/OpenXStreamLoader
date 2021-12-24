@@ -13,11 +13,30 @@ using System.Net;
 using System.Threading;
 using System.Windows.Threading;
 using System.Xml;
+using Newtonsoft.Json.Linq;
 
 namespace OpenXStreamLoader
 {
     public partial class Form1 : Form
     {
+        private enum OnlineCheckPriority
+        {
+            Low,
+            High
+        }
+
+        public enum OnlineStatus
+        {
+            Unknown,
+            Offline,
+            Public,
+            Private,
+            Hidden,
+            Away,
+            Error,
+            Error429
+        }
+
         internal class TaskConfiguration
         {
             public bool _waitForOnline;
@@ -31,27 +50,7 @@ namespace OpenXStreamLoader
             public ListViewItem _listItem;
             public TaskConfiguration _config;
             public string _consoleOutput;
-            public OnlineStatus modelStatus;
         };
-
-        private enum OnlineCheckPriority
-        {
-            Low,
-            High
-        }
-
-        public enum OnlineStatus
-        {
-            Unknown,
-            OfflineImg,
-            Offline,
-            Public,
-            Private,
-            Hidden,
-            Away,
-            Error,
-            Error429
-        }
 
         internal class FavoriteData
         {
@@ -60,10 +59,13 @@ namespace OpenXStreamLoader
             public Image _profileImage;
         }
 
-        private readonly float _version = 0.4187f;
+        private readonly float _version = 0.5f;
         private readonly int _trayBalloonTimeout = 5000; // ms
         private readonly string _streamlinkDefaultOptions = "--hls-timeout 120 --hls-playlist-reload-attempts 20 --hls-segment-timeout 90 --hds-segment-threads 8 --hls-segment-threads 8 --hds-timeout 120 --hds-segment-timeout 90 --hds-segment-attempts 20";
         private readonly object _onlineCheckQueueLock = new object();
+
+        private readonly string _site1String1 = "aHR0cHM6Ly9yb29taW1nLnN0cmVhbS5oaWdod2VibWVkaWEuY29tL3JpLw==".from64();
+        private readonly string _site1String2 = "aHR0cHM6Ly9jaGF0dXJiYXRlLmNvbS9nZXRfZWRnZV9obHNfdXJsX2FqYXgv".from64();
 
         private Settings _settings;
         private Dictionary<string, TaskData> _tasks;
@@ -78,19 +80,15 @@ namespace OpenXStreamLoader
         private bool _showingProfilePictures = false;
         private bool _appClosing = false;
         private Bitmap _offlineImage;
-        private DateTime _nextHttpRequestTime = DateTime.Now;
-        private ListViewColumnSorter lvwColumnSorter;
+        private ListViewColumnSorter _recordsColumnSorter;
 
         public Form1()
         {
             InitializeComponent();
 
-            // Create an instance of a ListView column sorter and assign it
-            // to the ListView control.
-            lvwColumnSorter = new ListViewColumnSorter();
-            this.lvTasks.ListViewItemSorter = lvwColumnSorter;
-
-            lvTasks.enableDoubleBuffering(true);
+            _recordsColumnSorter = new ListViewColumnSorter();
+            lvTasks.ListViewItemSorter = _recordsColumnSorter;
+            lvTasks.enableDoubleBuffering();
             lvFavorites.enableDoubleBuffering(true);
             _previewForm = new PreviewForm();
 
@@ -144,15 +142,15 @@ namespace OpenXStreamLoader
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            saveConfiguration();
             stopOnlineCheckThread();
+            saveConfiguration();
         }
 
         private void setVersion()
         {
             var versionString = _version.ToString();
 
-            Text = _settings._groupName + "  " + Text + "  " + versionString; // + "  " + _settings._groupName;
+            Text += versionString;
             lbVersion.Text += versionString;
         }
 
@@ -168,11 +166,8 @@ namespace OpenXStreamLoader
             _settings._streamlinkExePath = "Streamlink_Portable\\Streamlink.exe";
             _settings._streamlinkOptions = _streamlinkDefaultOptions;
             _settings._defaultRecordsPath = "";
-            _settings._groupName = "";
             _settings._browserPath = "";
             _settings._httpRequestDelay = 300;
-            _settings._httpRequestMethod1Delay = 10000;
-            _settings._httpRequestDelay2 = 150;
             _settings._favoritesUpdateInterval = 60;
             _settings._waitingTaskInterval = 30;
             _settings._minimizeToTray = false;
@@ -187,8 +182,6 @@ namespace OpenXStreamLoader
             tbDefaultRecordsPath.Text = _settings._defaultRecordsPath;
             tbBrowserPath.Text = _settings._browserPath;
             nuHttpRequestDelay.Value = _settings._httpRequestDelay;
-            nuHttpRequestDelay1.Value = _settings._httpRequestMethod1Delay;
-            nuHttpRequestDelay2.Value = _settings._httpRequestDelay2;
             nuFavoritesUpdateInterval.Value = _settings._favoritesUpdateInterval;
             nuWaitingTaskInterval.Value = _settings._waitingTaskInterval;
             cbMinimizeToTray.Checked = _settings._minimizeToTray;
@@ -227,8 +220,7 @@ namespace OpenXStreamLoader
                 var streamlinkOptionsElement = settingsElement["StreamlinkOptions"];
                 var defaultRecordsPathElement = settingsElement["DefaultRecordsPath"];
                 var browserPathElement = settingsElement["BrowserPath"];
-                var groupNameElement = settingsElement["GroupName"];
-                
+
                 if (streamlinkExeElement != null)
                 {
                     _settings._streamlinkExePath = streamlinkExeElement.InnerText;
@@ -244,11 +236,6 @@ namespace OpenXStreamLoader
                     _settings._defaultRecordsPath = defaultRecordsPathElement.InnerText;
                 }
 
-                if (groupNameElement != null)
-                {
-                    _settings._groupName = groupNameElement.InnerText;
-                }
-
                 if (browserPathElement != null)
                 {
                     _settings._browserPath = browserPathElement.InnerText;
@@ -257,16 +244,6 @@ namespace OpenXStreamLoader
                 if (settingsElement.Attributes["HttpRequestDelay"] != null)
                 {
                     _settings._httpRequestDelay = settingsElement.Attributes["HttpRequestDelay"].InnerText.ToInt32Def(500).Clamp(nuHttpRequestDelay.Minimum.ToInt32(), nuHttpRequestDelay.Maximum.ToInt32());
-                }
-
-                if (settingsElement.Attributes["HttpRequestMethod1Delay"] != null)
-                {
-                    _settings._httpRequestMethod1Delay = settingsElement.Attributes["HttpRequestMethod1Delay"].InnerText.ToInt32Def(9000).Clamp(nuHttpRequestDelay1.Minimum.ToInt32(), nuHttpRequestDelay1.Maximum.ToInt32());
-                }
-
-                if (settingsElement.Attributes["HttpRequestMethod2Delay"] != null)
-                {
-                    _settings._httpRequestDelay2 = settingsElement.Attributes["HttpRequestMethod2Delay"].InnerText.ToInt32Def(150).Clamp(nuHttpRequestDelay2.Minimum.ToInt32(), nuHttpRequestDelay2.Maximum.ToInt32());
                 }
 
                 if (settingsElement.Attributes["FavoritesUpdateInterval"] != null)
@@ -298,7 +275,7 @@ namespace OpenXStreamLoader
                 {
                     _settings._recordOnStart = settingsElement.Attributes["RecordOnStart"].InnerText.ToBoolean();
                 }
-                
+
 
                 if (recordsElement != null)
                 {
@@ -405,25 +382,20 @@ namespace OpenXStreamLoader
             var streamlinkExeElement = doc.CreateElement("StreamlinkExe");
             var streamlinkOptionsElement = doc.CreateElement("StreamlinkOptions");
             var defaultRecordsPathElement = doc.CreateElement("DefaultRecordsPath");
-            var groupNameElement = doc.CreateElement("GroupName");
 
             var browserPathElement = doc.CreateElement("BrowserPath");
 
             streamlinkExeElement.InnerText = _settings._streamlinkExePath;
             streamlinkOptionsElement.InnerText = _settings._streamlinkOptions;
             defaultRecordsPathElement.InnerText = _settings._defaultRecordsPath;
-            groupNameElement.InnerText = _settings._groupName;
             browserPathElement.InnerText = _settings._browserPath;
 
             settingsElement.AppendChild(streamlinkExeElement);
             settingsElement.AppendChild(streamlinkOptionsElement);
             settingsElement.AppendChild(defaultRecordsPathElement);
-            settingsElement.AppendChild(groupNameElement);
             settingsElement.AppendChild(browserPathElement);
 
             settingsElement.SetAttribute("HttpRequestDelay", _settings._httpRequestDelay.ToString());
-            settingsElement.SetAttribute("HttpRequestMethod1Delay", _settings._httpRequestMethod1Delay.ToString());
-            settingsElement.SetAttribute("HttpRequestMethod2Delay", _settings._httpRequestDelay2.ToString());
             settingsElement.SetAttribute("FavoritesUpdateInterval", _settings._favoritesUpdateInterval.ToString());
             settingsElement.SetAttribute("WaitingTaskInterval", _settings._waitingTaskInterval.ToString());
             settingsElement.SetAttribute("Quality", cbQuality.Text.Trim());
@@ -436,7 +408,7 @@ namespace OpenXStreamLoader
                 try
                 {
 
-                    var element = doc.CreateElement(getXmlIdFromUrl(taskP.Key));
+                    var element = doc.CreateElement(getXmlIdFromUrl(taskP.Key)); //todo key replace with <Item Url=""> hence no need for try catch (because key could be illegal name for XML token, e.g. starts with digit)
 
                     element.SetAttribute("Url", taskP.Key);
                     element.SetAttribute("WaitForOnline", taskP.Value._config._waitForOnline.ToString());
@@ -454,11 +426,11 @@ namespace OpenXStreamLoader
                 try
                 {
 
-                var url = cbId.Items[i].ToString();
-                var element = doc.CreateElement(getXmlIdFromUrl(url));
+                    var url = cbId.Items[i].ToString();
+                    var element = doc.CreateElement(getXmlIdFromUrl(url));
 
-                element.SetAttribute("Url", url);
-                lastViewedElement.AppendChild(element);
+                    element.SetAttribute("Url", url);
+                    lastViewedElement.AppendChild(element);
                 }
                 catch { }
             }
@@ -466,7 +438,7 @@ namespace OpenXStreamLoader
             for (int i = 0; i < lvFavorites.Items.Count; i++)
             {
                 try
-                { 
+                {
                     var url = lvFavorites.Items[i].Text;
                     var data = _favoritesMap[url];
                     var element = doc.CreateElement(getXmlIdFromUrl(url));
@@ -500,9 +472,6 @@ namespace OpenXStreamLoader
         private HttpWebRequest creatWebRequest(string url, int timeout = 5000 /*ms*/)
         {
             var request = WebRequest.Create(url) as HttpWebRequest;
-
-            //CookieContainer _Tempcookies = new CookieContainer();  // try starting without cookies each call
-            //request.CookieContainer = _Tempcookies;
 
             request.CookieContainer = _cookies;
             request.Method = "GET";
@@ -553,7 +522,7 @@ namespace OpenXStreamLoader
         {
             try
             {
-                using (var response = (HttpWebResponse)creatWebRequest("https://roomimg.stream.highwebmedia.com/ri/_________.jpg").GetResponse())
+                using (var response = (HttpWebResponse)creatWebRequest(_site1String1 + "_________.jpg").GetResponse())
                 {
                     if (response.StatusCode == HttpStatusCode.OK && response.ContentType == "image/jpeg")
                     {
@@ -682,27 +651,20 @@ namespace OpenXStreamLoader
             printFinalFileName();
         }
 
-        private string getIdFromUrl(string url)
+        private string getXmlIdFromUrl(string url) //todo del
         {
-            Regex regex = new Regex("\\.com\\/(?<string>(.*))\\/");
-
-            return regex.Match(url).Groups["string"].ToString();
-        }
-
-        private string getXmlIdFromUrl(string url)
-        {
-            string temp = getIdFromUrl(url);   // .Replace("/'", "").Replace("\\", "").Replace(":", "");
+            string temp = Utils.getIdFromUrl(url);   // .Replace("/'", "").Replace("\\", "").Replace(":", "");
             temp = Regex.Replace(temp, @"[^a-zA-Z0-9_.-]", "");  //Remove illegal characters
             if (!Regex.IsMatch(temp.Substring(0, 1), @"^[a-zA-Z]")) return "_" + temp;  //If first character not letter, add underscore prefix
             return temp;
-            
+
         }
 
         private void checkIdName()
         {
             if (cbSameNameAsId.Checked)
             {
-                string id = getIdFromUrl(cbId.Text);
+                string id = Utils.getIdFromUrl(cbId.Text);
 
                 if (!String.IsNullOrEmpty(id))
                 {
@@ -715,7 +677,7 @@ namespace OpenXStreamLoader
         {
             string fileName = tbFileName.Text.Trim();
             string quality = cbQuality.Text.Trim();
-            int qIndex = quality.IndexOf(',');
+            int qIndex = quality.IndexOf(',');//todo what is this for?
             if (qIndex > 0) quality = quality.Substring(0, qIndex - 1);
 
             if (!Path.IsPathRooted(fileName))
@@ -769,6 +731,31 @@ namespace OpenXStreamLoader
             });
         }
 
+        private void updateTaskFileInfo(ListViewItem item, Task.IStatusView status)
+        {
+            if (status.FileSize > 0)
+            {
+                item.SubItems[5].Text = getDurationString(status.Created, status.Ended);
+                item.SubItems[6].Text = Utils.formatBytes(status.FileSize);
+                item.SubItems[7].Text = status.FileName;
+            }
+        }
+
+        private void updateModelStatus(string url, OnlineStatus status) //todo Model class
+        {
+            if (!_tasks.ContainsKey(url))
+            {
+                return;
+            }
+
+            var task = _tasks[url];
+            var item = task._listItem;
+
+            lvTasks.BeginUpdate();
+            item.SubItems[3].Text = status.ToString() + "  " + DateTime.Now.ToString("HH꞉mm");
+            lvTasks.EndUpdate();
+        }
+
         private void onTaskStatusChanged(string url, Task.IStatusView status)
         {
             if (!_tasks.ContainsKey(url))
@@ -781,13 +768,9 @@ namespace OpenXStreamLoader
 
             task._consoleOutput = status.ConsoleOutput;
             lvTasks.BeginUpdate();
-            string mstatus = task.modelStatus.ToString();
-
-            item.SubItems[3].Text = mstatus + "  " + DateTime.Now.ToString("HH꞉mm");
             item.SubItems[5].Text = "";
             item.SubItems[6].Text = "";
             item.SubItems[7].Text = "";
-
 
             switch (status.State)
             {
@@ -795,10 +778,8 @@ namespace OpenXStreamLoader
                 {
                     item.SubItems[2].Text = "Recording...";
                     item.SubItems[3].Text = "";
-                    item.SubItems[5].Text = getDurationString(status.Created);
-                    item.SubItems[6].Text = Utils.formatBytes(status.FileSize);
-                    item.SubItems[7].Text = status.FileName;
                     item.BackColor = Color.Lime;
+                    updateTaskFileInfo(item, status);
 
                     break;
                 }
@@ -807,13 +788,7 @@ namespace OpenXStreamLoader
                 {
                     item.SubItems[2].Text = "Waiting...";
                     item.BackColor = Color.Gold;
-
-                    if (status.FileSize > 0)
-                    {
-                        item.SubItems[5].Text = getDurationString(status.Created, status.Ended);
-                        item.SubItems[6].Text = Utils.formatBytes(status.FileSize);
-                        item.SubItems[7].Text = status.FileName;
-                    }
+                    updateTaskFileInfo(item, status);
 
                     break;
                 }
@@ -821,13 +796,8 @@ namespace OpenXStreamLoader
                 case Task.TaskState.Finished:
                 {
                     item.SubItems[2].Text = "Finished";
-                    if (status.FileSize > 0)
-                    {
-                        item.SubItems[5].Text = getDurationString(status.Created, status.Ended);
-                        item.SubItems[6].Text = Utils.formatBytes(status.FileSize);
-                        item.SubItems[7].Text = status.FileName;
-                    }
                     item.BackColor = SystemColors.Window;
+                    updateTaskFileInfo(item, status);
 
                     break;
                 }
@@ -835,13 +805,8 @@ namespace OpenXStreamLoader
                 case Task.TaskState.Stopped:
                 {
                     item.SubItems[2].Text = "Stopped";
-                    if (status.FileSize > 0)
-                    {
-                        item.SubItems[5].Text = getDurationString(status.Created, status.Ended);
-                        item.SubItems[6].Text = Utils.formatBytes(status.FileSize);
-                        item.SubItems[7].Text = status.FileName;
-                    }
                     item.BackColor = SystemColors.Window;
+                    updateTaskFileInfo(item, status);
 
                     break;
                 }
@@ -928,7 +893,7 @@ namespace OpenXStreamLoader
             if (_settings._showOnlineNotification && data._status != OnlineStatus.Public && onlineStatus == OnlineStatus.Public)
             {
                 trayIcon.Tag = url;
-                trayIcon.ShowBalloonTip(_trayBalloonTimeout, "OpenXStreamLoader", "\"" + getIdFromUrl(url) + "\" is online now", ToolTipIcon.Info);
+                trayIcon.ShowBalloonTip(_trayBalloonTimeout, "OpenXStreamLoader", "\"" + Utils.getIdFromUrl(url) + "\" is online now", ToolTipIcon.Info);
             }
 
             data._status = onlineStatus;
@@ -938,7 +903,6 @@ namespace OpenXStreamLoader
             if (onlineStatus == OnlineStatus.Public)
             {
                 updateFavoriteImage(url);
-
             }
 
             lvFavorites.EndUpdate();
@@ -957,7 +921,7 @@ namespace OpenXStreamLoader
 
             try
             {
-                using (var response = (HttpWebResponse)creatWebRequest("https://roomimg.stream.highwebmedia.com/ri/" + id + ".jpg").GetResponse())
+                using (var response = (HttpWebResponse)creatWebRequest(_site1String1 + id + ".jpg").GetResponse())
                 {
                     if (response.StatusCode == HttpStatusCode.OK &&
                         response.ContentType == "image/jpeg")
@@ -1019,7 +983,6 @@ namespace OpenXStreamLoader
 
         private void queueOnlineStatusCheck(string url, OnlineCheckPriority priority)
         {
-            priority = OnlineCheckPriority.High;  //force all into High bucket.  with large queue, low bucket never processes
             lock (_onlineCheckQueueLock)
             {
                 if (_onlineCheckHighPriorityQueue.Contains(url))
@@ -1069,16 +1032,9 @@ namespace OpenXStreamLoader
 
             while (_onlineCheckIsRunning)
             {
-                // For Loop runs if there are items in either queue and program is not shutting down.
-                for (int high = 0; (getQueueCount(_onlineCheckHighPriorityQueue) > 0 || getQueueCount(_onlineCheckLowPriorityQueue) > 0) && _onlineCheckIsRunning; high++)
+                for (int high = 0; (getQueueCount(_onlineCheckHighPriorityQueue) > 0 || getQueueCount(_onlineCheckLowPriorityQueue) > 0) && _onlineCheckIsRunning;)
                 {
                     _httpRequestDelay = _settings._httpRequestDelay;
-
-                    while (cbSuspend.Checked) 
-                    {
-                        System.Threading.Thread.Sleep(_httpRequestDelay);
-                    }
-
 
                     if (high < 2)
                     {
@@ -1086,6 +1042,7 @@ namespace OpenXStreamLoader
                         {
                             dispatchOnlineCheckResult(url, requestUrlOnlineStatus(url));
                             System.Threading.Thread.Sleep(_httpRequestDelay);
+                            high++;
 
                             continue;
                         }
@@ -1146,20 +1103,8 @@ namespace OpenXStreamLoader
 
         private void onOnlineCheckResult(string url, OnlineStatus status)
         {
-            if (_favoritesMap.ContainsKey(url))
-            {
-                setFavoriteStatus(url, status);
-            }
-
-            if (_tasks.ContainsKey(url))
-            {
-                updateTask(url, status);
-            }
-
-            //if (status == OnlineStatus.Error) 
-            //{
-            //    System.Threading.Thread.Sleep(150000);  //150 seconds
-            //}
+            setFavoriteStatus(url, status);
+            updateTask(url, status);
         }
 
         private void updateTask(string url, OnlineStatus status)
@@ -1170,140 +1115,102 @@ namespace OpenXStreamLoader
             }
 
             var task = _tasks[url];
-            task.modelStatus = status;
 
-            onTaskStatusChanged(url, task._task.TaskStatus);
+            updateModelStatus(url, status);
+
             if (status == OnlineStatus.Public)
             {
                 _tasks[url]._task.ResumeOnline();
-                //System.Threading.Thread.Sleep(_settings._httpRequestMethod1Delay);
             }
         }
 
         private OnlineStatus requestUrlOnlineStatus(string url)
         {
-            //return requestUrlOnlineStatusMethod1(url);  // too easy for cloudflare to generate 429 response
-            return requestUrlOnlineStatusMethod2(url);
+            return site1OnlineStatusCheckMethod2(url);
         }
 
-        private OnlineStatus requestUrlOnlineStatusMethod1(string url)
+        private OnlineStatus site1OnlineStatusCheckMethod1(string url)
         {
             OnlineStatus result = OnlineStatus.Unknown;
-            //System.Threading.Thread.Sleep(_settings._httpRequestMethod1Delay);
-//            int retryAfter = 0;
-            string strRetryAfter = "";
 
             try
             {
-                for (int loop = 0; loop < 5; loop++)
+                string id = Utils.getIdFromUrl(url);
+                var request = WebRequest.Create(_site1String2) as HttpWebRequest;
+                var postData = "room_slug=" + Uri.EscapeDataString(id) + "&bandwidth=" + Uri.EscapeDataString("high");
+                var data = Encoding.ASCII.GetBytes(postData);
+
+                request.CookieContainer = _cookies;
+                request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
+                request.ContentLength = data.Length;
+                request.Referer = url;
+                request.Headers.Add("X-Requested-With", "XMLHttpRequest");
+
+                using (var stream = request.GetRequestStream())
                 {
-                    System.Threading.Thread.Sleep(_settings._httpRequestMethod1Delay + (loop * 30000)); // increase wait each attempt
+                    stream.Write(data, 0, data.Length);
+                }
 
-                    using (var response = (HttpWebResponse)creatWebRequest(url).GetResponse())
+                using (var response = (HttpWebResponse)request.GetResponse())
+                {
+                    if (response.StatusCode != HttpStatusCode.OK)
                     {
-                        //429 error, sleep some more and try again.
-                        //if (response.Headers.Get(0).Contains("429") || response.StatusCode == HttpStatusCode.BadRequest) // TooManyRequests missing this version?
-                        if (response.StatusCode != HttpStatusCode.OK) // TooManyRequests missing this version?
-                        {
-                            strRetryAfter = response.Headers.GetValues("Retry-After").FirstOrDefault();
-                            response.Close();
-                            if (textBox1.Lines.Count() > 100) textBox1.Text = "";
-                            textBox1.AppendText(response.StatusCode.ToString() + " on " + url + "  Retry-After=" + strRetryAfter + "/n");
-                            continue;
-                        }
+                        return OnlineStatus.Error;
+                    }
 
-                        StreamReader streamReader = new StreamReader(response.GetResponseStream());
+                    StreamReader streamReader = new StreamReader(response.GetResponseStream());
+                    string responseString = streamReader.ReadToEnd();
+                    string status = JObject.Parse(responseString)["room_status"].ToString();
 
-                        string pageText = streamReader.ReadToEnd();
-                        response.Close();
-
-                        Regex regex = new Regex("room_status\\\\u0022: \\\\u0022(?<string>.*)\\\\u0022, \\\\u0022room_uid");
-                        string statusString = regex.Match(pageText).Groups["string"].ToString().ToLower();
-
-                        if (statusString == "public")
-                        {
-                            result = OnlineStatus.Public;
-                        }
-                        else if (statusString == "private")
-                        {
-                            result = OnlineStatus.Private;
-                        }
-                        else if (statusString == "hidden")
-                        {
-                            result = OnlineStatus.Hidden;
-                        }
-                        else if (statusString == "away")
-                        {
-                            result = OnlineStatus.Away;
-                        }
-                        else if (statusString == "offline")
-                        {
-                            result = OnlineStatus.Offline;
-                        }
-
-                        break;
+                    if (status == "public")
+                    {
+                        result = OnlineStatus.Public;
+                    }
+                    else if (status == "private")
+                    {
+                        result = OnlineStatus.Private;
+                    }
+                    else if (status == "hidden")
+                    {
+                        result = OnlineStatus.Hidden;
+                    }
+                    else if (status == "away")
+                    {
+                        result = OnlineStatus.Away;
+                    }
+                    else if (status == "offline")
+                    {
+                        result = OnlineStatus.Offline;
                     }
                 }
-
             }
-            //catch (WebException webException)
-            //{
-            //    result = OnlineStatus.Error;
-
-            //    if (webException.Status == WebExceptionStatus.ProtocolError)
-            //    {
-            //        var httpResponse = (HttpWebResponse)webException.Response;
-            //        //var responseText = "";
-            //        //using (var content = new StreamReader(httpResponse.GetResponseStream()))
-            //        //{
-            //        //    responseText = content.ReadToEnd(); // Get response body as text
-            //        //}
-            //        int statusCode = (int)httpResponse.StatusCode; // Get the status code (429 error code will be here)
-            //        if (statusCode == 429)
-            //        {
-            //            result = OnlineStatus.Error429;
-
-            //        }
-            //    }
-            //}
-
-            catch (Exception E)
+            catch (Exception exception)
             {
-                result = OnlineStatus.Error;
-
-                //if (textBox1.Lines.Count() > 100) textBox1.Text = "";
-                //textBox1.AppendText(url + "\n" + E.Message + "\n");
-                if (E.Message.Contains("429"))
-                {
-                    result = OnlineStatus.Error429;
-                    System.Threading.Thread.Sleep(_settings._httpRequestDelay2 * 1000);
-                }
-
+                return OnlineStatus.Error;
             }
 
             return result;
         }
 
-        private OnlineStatus requestUrlOnlineStatusMethod2(string url)
+        private OnlineStatus site1OnlineStatusCheckMethod2(string url)
         {
-            string id = getIdFromUrl(url);
+            string id = Utils.getIdFromUrl(url);
 
             try
             {
-                using (var response = (HttpWebResponse)creatWebRequest("https://roomimg.stream.highwebmedia.com/ri/" + id + ".jpg").GetResponse())
+                using (var response = (HttpWebResponse)creatWebRequest(_site1String1 + id + ".jpg").GetResponse())
                 {
                     if (response.StatusCode == HttpStatusCode.OK &&
                         response.ContentType == "image/jpeg")
                     {
                         if (!Utils.isBitmapsEqual(_offlineImage, new Bitmap(response.GetResponseStream())))
                         {
-                            var result = requestUrlOnlineStatusMethod1(url);
-
-                            return result;
+                            return site1OnlineStatusCheckMethod1(url);
                         }
                         else
                         {
-                            return OnlineStatus.OfflineImg;
+                            return OnlineStatus.Offline; //todo unknown
                         }
                     }
                     else
@@ -1481,13 +1388,9 @@ namespace OpenXStreamLoader
             }
         }
 
-        private string getDurationString(DateTime start, DateTime end)
+        private static string getDurationString(DateTime start, DateTime end)
         {
             return end.Subtract(start).ToString(@"hh\:mm\:ss");
-        }
-        private string getDurationString(DateTime start)
-        {
-            return DateTime.Now.Subtract(start).ToString(@"hh\:mm\:ss");
         }
 
         private void viewStreamLinkOutputToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1511,7 +1414,6 @@ namespace OpenXStreamLoader
 
             openFileToolStripMenuItem.Enabled = isItemClicked;
             openTaskUrlInBrowserToolStripMenuItem.Enabled = isItemClicked;
-            openTaskUrlImgInBrowserToolStripMenuItem.Enabled = isItemClicked;
             showInFileExplorerToolStripMenuItem.Enabled = isItemClicked;
             addTaskToFavoritesToolStripMenuItem.Enabled = isItemClicked;
             copyURLToInputFieldToolStripMenuItem.Enabled = isItemClicked;
@@ -1529,16 +1431,6 @@ namespace OpenXStreamLoader
             }
 
             openUrlInBrowser(lvTasks.SelectedItems[0].Text);
-        }
-        private void openTaskUrlImgInBrowserToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (lvTasks.SelectedItems.Count == 0)
-            {
-                return;
-            }
-
-            string id = getIdFromUrl(lvTasks.SelectedItems[0].Text);
-            openUrlInBrowser("https://roomimg.stream.highwebmedia.com/ri/" + id + ".jpg");
         }
 
         private void showInFileExplorerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1706,15 +1598,6 @@ namespace OpenXStreamLoader
         private void nuHttpRequestDelay_ValueChanged(object sender, EventArgs e)
         {
             _settings._httpRequestDelay = nuHttpRequestDelay.Value.ToInt32();
-        }
-
-        private void nuHttpRequestDelay1_ValueChanged(object sender, EventArgs e)
-        {
-            _settings._httpRequestMethod1Delay = nuHttpRequestDelay1.Value.ToInt32();
-        }
-        private void nuHttpRequestDelay2_ValueChanged(object sender, EventArgs e)
-        {
-            _settings._httpRequestDelay2 = nuHttpRequestDelay2.Value.ToInt32();
         }
 
         private void tabPage2_Enter(object sender, EventArgs e)
@@ -1950,11 +1833,9 @@ namespace OpenXStreamLoader
 
         private void startAllTasks()
         {
-            //int _httpRequestDelay = _settings._httpRequestDelay;
-            foreach (var task in _tasks)  //This will start all tasks that are not currently recording
+            foreach (var task in _tasks)
             {
-                task.Value._task.Start(true);  //asWaiting
-                // System.Threading.Thread.Sleep(_httpRequestDelay/3);
+                task.Value._task.Start(asWaiting: true);
             }
         }
 
@@ -1966,40 +1847,27 @@ namespace OpenXStreamLoader
         private void lvTasks_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             // Determine if clicked column is already the column that is being sorted.
-            if (e.Column == lvwColumnSorter.SortColumn)
+            if (e.Column == _recordsColumnSorter.SortColumn)
             {
                 // Reverse the current sort direction for this column.
-                if (lvwColumnSorter.Order == SortOrder.Ascending)
+                if (_recordsColumnSorter.Order == SortOrder.Ascending)
                 {
-                    lvwColumnSorter.Order = SortOrder.Descending;
+                    _recordsColumnSorter.Order = SortOrder.Descending;
                 }
                 else
                 {
-                    lvwColumnSorter.Order = SortOrder.Ascending;
+                    _recordsColumnSorter.Order = SortOrder.Ascending;
                 }
             }
             else
             {
                 // Set the column number that is to be sorted; default to ascending.
-                lvwColumnSorter.SortColumn = e.Column;
-                lvwColumnSorter.Order = SortOrder.Ascending;
+                _recordsColumnSorter.SortColumn = e.Column;
+                _recordsColumnSorter.Order = SortOrder.Ascending;
             }
 
             // Perform the sort with these new sort options.
             this.lvTasks.Sort();
-        }
-
-        private void btSave_Click(object sender, EventArgs e)
-        {
-            saveConfiguration();
-        }
-
-        private void btSort_Click(object sender, EventArgs e)
-        {
-            lvwColumnSorter.SortColumn = 2; 
-            lvwColumnSorter.Order = SortOrder.Ascending;
-            this.lvTasks.Sort();
-            this.lvTasks.EnsureVisible(0);  //top of list
         }
     }
 }

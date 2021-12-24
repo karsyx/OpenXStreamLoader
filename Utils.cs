@@ -6,7 +6,8 @@ using System.Reflection;
 using System.Management;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace OpenXStreamLoader
 {
@@ -82,6 +83,7 @@ namespace OpenXStreamLoader
             string[] Suffix = { "B", "KB", "MB", "GB", "TB" };
             int i;
             double dblSByte = bytes;
+
             for (i = 0; i < Suffix.Length && bytes >= 1024; i++, bytes /= 1024)
             {
                 dblSByte = bytes / 1024.0;
@@ -116,7 +118,7 @@ namespace OpenXStreamLoader
             return Decimal.ToInt32(d);
         }
 
-        public static void enableDoubleBuffering(this Control control, bool enable)
+        public static void enableDoubleBuffering(this Control control, bool enable = true)
         {
             var method = typeof(Control).GetMethod("SetStyle", BindingFlags.Instance | BindingFlags.NonPublic);
 
@@ -169,21 +171,21 @@ namespace OpenXStreamLoader
             {
                 unsafe
                 {
-                    // Processing only upper left half width half height
-
-                    const int noiseError = 3;
+                    // Processing only upper left corner, only red color values (as optimization)
+                    const int factor = 30;
+                    const int noiseError = 3; // tolerance (difference) for corresponding pixel values
 
                     byte* row1 = (byte*)bd1.Scan0.ToPointer();
                     byte* row2 = (byte*)bd2.Scan0.ToPointer();
-                    int widthBytes2 = b1.Size.Width * 4 / 2;
-                    int height2 = b1.Size.Height / 2;
+                    int widthBytesF = b1.Size.Width * 4 / factor;
+                    int heightF = b1.Size.Height / factor;
                     int difference = 0;
-                    int stride = bd1.Stride / 4;
-                    int threshold = b1.Size.Width / 2 * height2 * noiseError;
+                    int stride = bd1.Stride;
+                    int threshold = b1.Size.Width / factor * heightF * noiseError;
 
-                    for (int j = 0; j < height2; j++)
+                    for (int j = 0; j < heightF; j++)
                     {
-                        for (int i = 0; i < widthBytes2; i += 4) // only red component for optimization
+                        for (int i = 0; i < widthBytesF; i += 4) // only red component for optimization
                         {
                             difference += Math.Abs(row1[i] - row2[i]);
                         }
@@ -200,6 +202,18 @@ namespace OpenXStreamLoader
                 b1.UnlockBits(bd1);
                 b2.UnlockBits(bd2);
             }
+        }
+
+        public static string getIdFromUrl(string url)
+        {
+            var regex = new Regex("\\.com\\/(?<string>(.*))\\/");
+
+            return regex.Match(url).Groups["string"].ToString();
+        }
+
+        public static string from64(this string str)
+        {
+            return Encoding.UTF8.GetString(System.Convert.FromBase64String(str));
         }
     }
 }
