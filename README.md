@@ -1,6 +1,6 @@
 ![Alt text](/OX256.png?raw=true "Logo")
 # OpenXStreamLoader
-Online stream downloader v0.5 Patched
+Online stream downloader v.05 Patched
 
 ## Description
 Downloads online streams with Streamlink (included).\
