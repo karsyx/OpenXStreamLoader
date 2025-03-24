@@ -117,7 +117,6 @@
             this.label23 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.lbReleases = new System.Windows.Forms.LinkLabel();
-            this.lbProductPage = new System.Windows.Forms.LinkLabel();
             this.lbVersion = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -131,6 +130,7 @@
             this.cmTrayIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lbProductPage = new System.Windows.Forms.LinkLabel();
             this.tabsControl.SuspendLayout();
             this.tpRecord.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -437,84 +437,84 @@
             this.deleteAllToolStripMenuItem,
             this.viewStreamLinkOutputToolStripMenuItem});
             this.cmTasks.Name = "cmTasks";
-            this.cmTasks.Size = new System.Drawing.Size(202, 246);
+            this.cmTasks.Size = new System.Drawing.Size(213, 246);
             this.cmTasks.Opening += new System.ComponentModel.CancelEventHandler(this.cmTasks_Opening);
             // 
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.openFileToolStripMenuItem.Text = "Open file";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
             // openTaskUrlInBrowserToolStripMenuItem
             // 
             this.openTaskUrlInBrowserToolStripMenuItem.Name = "openTaskUrlInBrowserToolStripMenuItem";
-            this.openTaskUrlInBrowserToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.openTaskUrlInBrowserToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.openTaskUrlInBrowserToolStripMenuItem.Text = "Open URL in browser";
             this.openTaskUrlInBrowserToolStripMenuItem.Click += new System.EventHandler(this.openTaskUrlInBrowserToolStripMenuItem_Click);
             // 
             // showInFileExplorerToolStripMenuItem
             // 
             this.showInFileExplorerToolStripMenuItem.Name = "showInFileExplorerToolStripMenuItem";
-            this.showInFileExplorerToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.showInFileExplorerToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.showInFileExplorerToolStripMenuItem.Text = "Navigate to file in Explorer";
             this.showInFileExplorerToolStripMenuItem.Click += new System.EventHandler(this.showInFileExplorerToolStripMenuItem_Click);
             // 
             // addTaskToFavoritesToolStripMenuItem
             // 
             this.addTaskToFavoritesToolStripMenuItem.Name = "addTaskToFavoritesToolStripMenuItem";
-            this.addTaskToFavoritesToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.addTaskToFavoritesToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.addTaskToFavoritesToolStripMenuItem.Text = "Add to favorites";
             this.addTaskToFavoritesToolStripMenuItem.Click += new System.EventHandler(this.addTaskToFavoritesToolStripMenuItem_Click);
             // 
             // copyURLToInputFieldToolStripMenuItem
             // 
             this.copyURLToInputFieldToolStripMenuItem.Name = "copyURLToInputFieldToolStripMenuItem";
-            this.copyURLToInputFieldToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.copyURLToInputFieldToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.copyURLToInputFieldToolStripMenuItem.Text = "Copy URL to clipboard";
             this.copyURLToInputFieldToolStripMenuItem.Click += new System.EventHandler(this.copyURLToInputFieldToolStripMenuItem_Click);
             // 
             // startToolStripMenuItem
             // 
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.startToolStripMenuItem.Text = "Start";
             this.startToolStripMenuItem.Click += new System.EventHandler(this.startToolStripMenuItem_Click);
             // 
             // startAllToolStripMenuItem
             // 
             this.startAllToolStripMenuItem.Name = "startAllToolStripMenuItem";
-            this.startAllToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.startAllToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.startAllToolStripMenuItem.Text = "Start all";
             this.startAllToolStripMenuItem.Click += new System.EventHandler(this.startAllToolStripMenuItem_Click);
             // 
             // stopToolStripMenuItem
             // 
             this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            this.stopToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.stopToolStripMenuItem.Text = "Stop";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // deleteAllToolStripMenuItem
             // 
             this.deleteAllToolStripMenuItem.Name = "deleteAllToolStripMenuItem";
-            this.deleteAllToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.deleteAllToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.deleteAllToolStripMenuItem.Text = "Delete all";
             this.deleteAllToolStripMenuItem.Click += new System.EventHandler(this.deleteAllToolStripMenuItem_Click);
             // 
             // viewStreamLinkOutputToolStripMenuItem
             // 
             this.viewStreamLinkOutputToolStripMenuItem.Name = "viewStreamLinkOutputToolStripMenuItem";
-            this.viewStreamLinkOutputToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.viewStreamLinkOutputToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.viewStreamLinkOutputToolStripMenuItem.Text = "View StreamLink output";
             this.viewStreamLinkOutputToolStripMenuItem.Click += new System.EventHandler(this.viewStreamLinkOutputToolStripMenuItem_Click);
             // 
@@ -573,14 +573,14 @@
             this.updateThisToolStripMenuItem,
             this.updateNowToolStripMenuItem});
             this.cmFavorites.Name = "cmFavorites";
-            this.cmFavorites.Size = new System.Drawing.Size(276, 158);
+            this.cmFavorites.Size = new System.Drawing.Size(297, 158);
             this.cmFavorites.Opening += new System.ComponentModel.CancelEventHandler(this.cmFavorites_Opening);
             // 
             // openInBrowserToolStripMenuItem
             // 
             this.openInBrowserToolStripMenuItem.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
             this.openInBrowserToolStripMenuItem.Name = "openInBrowserToolStripMenuItem";
-            this.openInBrowserToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.openInBrowserToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
             this.openInBrowserToolStripMenuItem.Text = "Open URL in browser";
             this.openInBrowserToolStripMenuItem.Click += new System.EventHandler(this.openInBrowserToolStripMenuItem_Click);
             // 
@@ -588,42 +588,42 @@
             // 
             this.startRecordToolStripMenuItem.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.startRecordToolStripMenuItem.Name = "startRecordToolStripMenuItem";
-            this.startRecordToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.startRecordToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
             this.startRecordToolStripMenuItem.Text = "Start record";
             this.startRecordToolStripMenuItem.Click += new System.EventHandler(this.startRecordToolStripMenuItem_Click);
             // 
             // copyURLToClipboardToolStripMenuItem
             // 
             this.copyURLToClipboardToolStripMenuItem.Name = "copyURLToClipboardToolStripMenuItem";
-            this.copyURLToClipboardToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.copyURLToClipboardToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
             this.copyURLToClipboardToolStripMenuItem.Text = "Copy URL to clipboard";
             this.copyURLToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyURLToClipboardToolStripMenuItem_Click);
             // 
             // showImageorHoverWithCtrlPressedToolStripMenuItem
             // 
             this.showImageorHoverWithCtrlPressedToolStripMenuItem.Name = "showImageorHoverWithCtrlPressedToolStripMenuItem";
-            this.showImageorHoverWithCtrlPressedToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.showImageorHoverWithCtrlPressedToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
             this.showImageorHoverWithCtrlPressedToolStripMenuItem.Text = "Show profile image (press Ctrl to show all)";
             this.showImageorHoverWithCtrlPressedToolStripMenuItem.Click += new System.EventHandler(this.showImageorHoverWithCtrlPressedToolStripMenuItem_Click);
             // 
             // deleteFavToolStripMenuItem
             // 
             this.deleteFavToolStripMenuItem.Name = "deleteFavToolStripMenuItem";
-            this.deleteFavToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.deleteFavToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
             this.deleteFavToolStripMenuItem.Text = "Delete";
             this.deleteFavToolStripMenuItem.Click += new System.EventHandler(this.deleteFavToolStripMenuItem_Click);
             // 
             // updateThisToolStripMenuItem
             // 
             this.updateThisToolStripMenuItem.Name = "updateThisToolStripMenuItem";
-            this.updateThisToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.updateThisToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
             this.updateThisToolStripMenuItem.Text = "Update this";
             this.updateThisToolStripMenuItem.Click += new System.EventHandler(this.updateThisToolStripMenuItem_Click);
             // 
             // updateNowToolStripMenuItem
             // 
             this.updateNowToolStripMenuItem.Name = "updateNowToolStripMenuItem";
-            this.updateNowToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.updateNowToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
             this.updateNowToolStripMenuItem.Text = "Update all";
             this.updateNowToolStripMenuItem.Click += new System.EventHandler(this.updateNowToolStripMenuItem_Click);
             // 
@@ -1045,7 +1045,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(146, 96);
+            this.label12.Location = new System.Drawing.Point(146, 97);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(97, 17);
             this.label12.TabIndex = 6;
@@ -1057,23 +1057,11 @@
             this.lbReleases.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbReleases.Location = new System.Drawing.Point(249, 114);
             this.lbReleases.Name = "lbReleases";
-            this.lbReleases.Size = new System.Drawing.Size(414, 17);
+            this.lbReleases.Size = new System.Drawing.Size(360, 17);
             this.lbReleases.TabIndex = 4;
             this.lbReleases.TabStop = true;
-            this.lbReleases.Text = "https://github.com/m-alexander86/OpenXStreamLoader/releases";
+            this.lbReleases.Text = "https://github.com/karsyx/OpenXStreamLoader/releases";
             this.lbReleases.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lbReleases_LinkClicked);
-            // 
-            // lbProductPage
-            // 
-            this.lbProductPage.AutoSize = true;
-            this.lbProductPage.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbProductPage.Location = new System.Drawing.Point(249, 96);
-            this.lbProductPage.Name = "lbProductPage";
-            this.lbProductPage.Size = new System.Drawing.Size(356, 17);
-            this.lbProductPage.TabIndex = 3;
-            this.lbProductPage.TabStop = true;
-            this.lbProductPage.Text = "https://github.com/m-alexander86/OpenXStreamLoader";
-            this.lbProductPage.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lbProductPage_LinkClicked);
             // 
             // lbVersion
             // 
@@ -1081,9 +1069,9 @@
             this.lbVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbVersion.Location = new System.Drawing.Point(145, 47);
             this.lbVersion.Name = "lbVersion";
-            this.lbVersion.Size = new System.Drawing.Size(34, 20);
+            this.lbVersion.Size = new System.Drawing.Size(97, 20);
             this.lbVersion.TabIndex = 2;
-            this.lbVersion.Text = "ver ";
+            this.lbVersion.Text = "Patched ver ";
             // 
             // label11
             // 
@@ -1092,7 +1080,7 @@
             this.label11.ForeColor = System.Drawing.Color.DimGray;
             this.label11.Location = new System.Drawing.Point(145, 6);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(283, 32);
+            this.label11.Size = new System.Drawing.Size(282, 32);
             this.label11.TabIndex = 1;
             this.label11.Text = "OpenXStreamLoader";
             // 
@@ -1152,21 +1140,33 @@
             this.openToolStripMenuItem,
             this.quitToolStripMenuItem});
             this.cmTrayIcon.Name = "cmTrayIcon";
-            this.cmTrayIcon.Size = new System.Drawing.Size(101, 48);
+            this.cmTrayIcon.Size = new System.Drawing.Size(104, 48);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.quitToolStripMenuItem.Text = "Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
+            // 
+            // lbProductPage
+            // 
+            this.lbProductPage.AutoSize = true;
+            this.lbProductPage.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbProductPage.Location = new System.Drawing.Point(249, 96);
+            this.lbProductPage.Name = "lbProductPage";
+            this.lbProductPage.Size = new System.Drawing.Size(302, 17);
+            this.lbProductPage.TabIndex = 3;
+            this.lbProductPage.TabStop = true;
+            this.lbProductPage.Text = "https://github.com/karsyx/OpenXStreamLoader";
+            this.lbProductPage.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lbProductPage_LinkClicked);
             // 
             // Form1
             // 
@@ -1179,7 +1179,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "OpenXStreamLoader v";
+            this.Text = "Patched OpenXStreamLoader v";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -1249,7 +1249,6 @@
         private System.Windows.Forms.Timer tmrFavoritesStatusCheck;
         private System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.LinkLabel lbProductPage;
         private System.Windows.Forms.Label lbVersion;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ToolStripMenuItem openTaskUrlInBrowserToolStripMenuItem;
@@ -1308,6 +1307,7 @@
         private System.Windows.Forms.CheckBox cbRecordOnStart;
         private System.Windows.Forms.ToolStripMenuItem deleteAllToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader columnHeader10;
+        private System.Windows.Forms.LinkLabel lbProductPage;
     }
 }
 

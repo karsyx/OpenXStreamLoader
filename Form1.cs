@@ -64,7 +64,7 @@ namespace OpenXStreamLoader
         private readonly string _streamlinkDefaultOptions = "--hls-timeout 120 --hls-playlist-reload-attempts 20 --hls-segment-timeout 90 --hds-segment-threads 8 --hls-segment-threads 8 --hds-timeout 120 --hds-segment-timeout 90 --hds-segment-attempts 20";
         private readonly object _onlineCheckQueueLock = new object();
 
-        private readonly string _site1String1 = "aHR0cHM6Ly9yb29taW1nLnN0cmVhbS5oaWdod2VibWVkaWEuY29tL3JpLw==".from64();
+        private readonly string _site1String1 = "aHR0cHM6Ly90aHVtYi5saXZlLm1tY2RuLmNvbS9yaS8=".from64();
         private readonly string _site1String2 = "aHR0cHM6Ly9jaGF0dXJiYXRlLmNvbS9nZXRfZWRnZV9obHNfdXJsX2FqYXgv".from64();
 
         private Settings _settings;
@@ -483,7 +483,7 @@ namespace OpenXStreamLoader
         {
             try
             {
-                using (var response = creatWebRequest("http://github.com/voidtemp/OpenXStreamLoader/releases", 8000).GetResponse())
+                using (var response = creatWebRequest("https://github.com/karsyx/OpenXStreamLoader/releases", 8000).GetResponse())
                 {
                     StreamReader streamReader = new StreamReader(response.GetResponseStream());
                     string pageText = streamReader.ReadToEnd();
@@ -497,7 +497,7 @@ namespace OpenXStreamLoader
 
                         if (MessageBox.Show("New version available: v" + versionString + "\nOpen github releases page?", "OpenXStreamLoader", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
-                            openUrlInBrowser("https://github.com/voidtemp/OpenXStreamLoader/releases");
+                            openUrlInBrowser("https://github.com/karsyx/OpenXStreamLoader/releases");
                         }
 
                         return true;
